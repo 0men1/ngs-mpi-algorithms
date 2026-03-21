@@ -5,9 +5,13 @@ output_file=${2:-outputs/graph.json}
 
 # Generate the graph using NGS
 ngs_graph_file="raw_ngs_graph"
-java -Xms2G -Xmx30G -Dconfig.file=$config_file -jar NetGameSim/target/scala-3.2.2/netmodelsim.jar $ngs_graph_file
+
+
+if [[ ! -f "outputs/${ngs_graph_file}.ngs.dot" || ! -f "outputs/${ngs_graph_file}.ngs" ]]; then
+	java -Xms2G -Xmx30G -Dconfig.file=$config_file -jar NetGameSim/target/scala-3.2.2/netmodelsim.jar $ngs_graph_file;
+fi
 
 
 # Run graph enrichment
 
-
+python tools/graph_export/enrichment.py "outputs/${ngs_graph_file}.ngs.dot" "$output_file"
