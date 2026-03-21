@@ -24,10 +24,7 @@ def generateGraph(dotFile: str, output_file: str):
                 if v not in adj_list:
                     adj_list[v]=[]
 
-                # I think this is an undirected graph
                 adj_list[u].append((v, w))
-                adj_list[v].append((u, w))
-
 
     output_data=adj_list
 
