@@ -14,4 +14,5 @@ target_sources(ngs_mpi PRIVATE
 	src/GraphData.cpp
 )
 
+target_include_directories(ngs_mpi PRIVATE include)
 target_link_libraries(ngs_mpi PRIVATE MPI::MPI_CXX)

@@ -1,10 +1,14 @@
-#include <mpi.h>
-#include <vector>
 #include <iostream>
+#include <vector>
+#include <mpi.h>
 
 #include "GraphData.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char** argv) {
+	int world_size, world_rank;
+	MPI_Init(&argc, &argv);
+	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
 	std::string graphFile = "outputs/graph.json";
 	std::string partFile = "outputs/part.json";
@@ -28,8 +32,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	GraphData gd;
-	gd.loadFiles(graphFile, partFile);
+	GraphData graph(world_rank, graphFile, partFile);
 
 	std::cout << "Graph: " << graphFile << std::endl;
 	std::cout << "Partition: " << partFile << std::endl;
@@ -39,5 +42,6 @@ int main(int argc, char* argv[]) {
 
 	std::cout << "Finished running MPI runtime" << std::endl;
 
+	MPI_Finalize();
 	return 0;
 }
