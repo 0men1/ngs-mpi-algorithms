@@ -32,13 +32,13 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	GraphData graph(world_rank, graphFile, partFile);
-
 	std::cout << "Graph: " << graphFile << std::endl;
 	std::cout << "Partition: " << partFile << std::endl;
 	std::cout << "Algorithm: " << algorithm << std::endl;
 	std::cout << "Rounds: " << rounds << std::endl;
 	std::cout << "Source: " << source << std::endl;
+
+	GraphData graph(world_rank, graphFile, partFile);
 
 	std::cout << "Finished running MPI runtime" << std::endl;
 
