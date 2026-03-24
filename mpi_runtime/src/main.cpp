@@ -1,7 +1,8 @@
 #include <iostream>
+#include <memory>
 #include <vector>
 #include <mpi.h>
-
+#include "DistributedDijkstra.h"
 #include "GraphData.h"
 
 int main(int argc, char** argv) {
@@ -39,6 +40,17 @@ int main(int argc, char** argv) {
 	std::cout << "Source: " << source << std::endl;
 
 	GraphData graph(world_rank, graphFile, partFile);
+	std::unique_ptr<DistributedDijkstra> algo;
+
+	if (algorithm == "dijkstra") {
+		algo = std::make_unique<DistributedDijkstra>(std::stoi(source));
+	} else {
+		std::cout << "Requested algorithm is unknown. Aborting." << std::endl;
+		MPI_Abort(MPI_COMM_WORLD, 1);
+	}
+
+	algo->execute(graph);
+	algo->reportMetrics();
 
 	std::cout << "Finished running MPI runtime" << std::endl;
 

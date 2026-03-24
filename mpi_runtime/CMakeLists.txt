@@ -12,6 +12,7 @@ add_executable(ngs_mpi)
 target_sources(ngs_mpi PRIVATE
 	src/main.cpp 
 	src/GraphData.cpp
+	src/DistributedDijkstra.cpp
 )
 
 target_include_directories(ngs_mpi PRIVATE include)
