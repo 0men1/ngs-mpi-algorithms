@@ -1,46 +1,31 @@
 import sys
-import re
 import json
 
+def generateGraph(ngs_file: str, output_file: str):
+    print(f"Generating graph. NGS file: {ngs_file}")
 
+    adj_list = {}
 
-def generateGraph(dotFile: str, output_file: str):
-    print(f"generating graph. dotfile: {dotFile}")
+    with open(ngs_file, 'r') as f:
+        nodes_line = f.readline().strip()
+        edges_line = f.readline().strip()
 
-    # adjlist: node_id -> list of tuple(dest (int), weight(float))
-    adj_list={}
-    num_nodes=0
-    node_ids={}
-    pattern=re.compile(r'"(\d+)"\s*->\s*"(\d+)"\s*\["weight"="([0-9.]+)"\]')
+    nodes_data = json.loads(nodes_line)
+    edges_data = json.loads(edges_line)
 
-    with open(dotFile, 'r') as f:
-        for line in f:
-            match = pattern.search(line)
-            if match:
-                u=int(match.group(1))
-                v=int(match.group(2))
-                w=float(match.group(3))
+    for node in nodes_data:
+        adj_list[node["id"]] = []
 
-                if u not in node_ids:
-                    node_ids[u] = num_nodes
-                    num_nodes += 1
-                if v not in node_ids:
-                    node_ids[v] = num_nodes
-                    num_nodes += 1
+    for edge in edges_data:
+        u = edge["fromNode"]["id"]
+        v = edge["toNode"]["id"]
+        w = edge.get("cost", 0.0)
 
-                u = node_ids[u]
-                v = node_ids[v]
+        adj_list[u].append({"v": v, "w": w})
 
-                if u not in adj_list:
-                    adj_list[u]=[]
-                if v not in adj_list:
-                    adj_list[v]=[]
-
-                adj_list[u].append({"v": v, "w": w})
-
-    output_data={
+    output_data = {
         "metadata": {
-            "num_nodes": num_nodes
+            "num_nodes": len(adj_list)
         },
         "adjacency_list": adj_list
     }
@@ -53,12 +38,11 @@ def generateGraph(dotFile: str, output_file: str):
 def main():
     print("Running enrichment")
     if len(sys.argv) != 3:
-        sys.exit("Usage: python enrich.py <input.dot> <output.json>")
+        sys.exit("Usage: python enrich.py <input.ngs> <output.json>")
 
-    dot_file: str = sys.argv[1]
+    ngs_file: str = sys.argv[1]
     output_file: str = sys.argv[2]
-    generateGraph(dot_file, output_file)
+    generateGraph(ngs_file, output_file)
 
 if __name__ == "__main__":
     main()
-
