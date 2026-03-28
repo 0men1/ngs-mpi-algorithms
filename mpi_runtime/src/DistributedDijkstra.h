@@ -12,7 +12,7 @@ struct UpdateMsg {
 	float dist;
 };
 
-class DistributedDijkstra : DistributedAlgorithm {
+class DistributedDijkstra : public DistributedAlgorithm {
 public:
 	DistributedDijkstra(int source): m_sourceNode(source) {}
 	void execute(GraphData &graph) override;

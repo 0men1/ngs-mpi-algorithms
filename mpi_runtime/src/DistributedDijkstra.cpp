@@ -50,7 +50,7 @@ void DistributedDijkstra::execute(GraphData& graph) {
 		settled[globalNode] = true;
 
 		std::vector<int> sendCounts(rankSize, 0);
-		std::vector<std::vector<UpdateMsg>> outgoingUpdates(rankSize);
+		std::vector<std::vector<UpdateMsg>> outMsgs(rankSize);
 		if (globalRank == rank) {
 			for (Edge edge : graph.m_adjList[globalNode]) {
 				float newDist = global_min.distance + edge.weight;
@@ -61,7 +61,7 @@ void DistributedDijkstra::execute(GraphData& graph) {
 						distance[edge.dest] = newDist;
 					}
 				} else {
-					outgoingUpdates[edgeOwnerRank].push_back({edge.dest, newDist});
+					outMsgs[edgeOwnerRank].push_back({edge.dest, newDist});
 					sendCounts[edgeOwnerRank]++;
 					m_numMessages++;
 				}
@@ -74,7 +74,7 @@ void DistributedDijkstra::execute(GraphData& graph) {
 
 			for (int r =0; r < rankSize; r++) {
 				if (r != rank && sendCounts[r] > 0) {
-					MPI_Send(outgoingUpdates[r].data(), sendCounts[r] * sizeof(UpdateMsg), MPI_BYTE, r, 0, MPI_COMM_WORLD);
+					MPI_Send(outMsgs[r].data(), sendCounts[r] * sizeof(UpdateMsg), MPI_BYTE, r, 0, MPI_COMM_WORLD);
 				}
 			}
 		} else if (sendCounts[rank] > 0) {

@@ -1,5 +1,25 @@
 import sys
 import json
+from collections import deque
+
+
+def checkConnected(adj_list: dict) -> bool:
+    visited=set()
+    start_node = next(iter(adj_list))
+    q=deque()
+    q.append(start_node)
+    visited.add(start_node)
+
+    while q:
+        nodeId = q.popleft()
+        for edges in adj_list[nodeId]:
+            neighbor = edges["v"]
+            if neighbor not in visited:
+                visited.add(neighbor)
+                q.append(neighbor)
+
+    return len(visited) == len(adj_list)
+
 
 def generateGraph(ngs_file: str, output_file: str):
     print(f"Generating graph. NGS file: {ngs_file}")
@@ -22,6 +42,9 @@ def generateGraph(ngs_file: str, output_file: str):
         w = edge.get("cost", 0.0)
 
         adj_list[u].append({"v": v, "w": w})
+
+    if not checkConnected(adj_list):
+        sys.exit("The generated graph is not connected. Failed to output graph JSON")
 
     output_data = {
         "metadata": {

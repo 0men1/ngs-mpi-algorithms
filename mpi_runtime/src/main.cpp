@@ -2,7 +2,9 @@
 #include <memory>
 #include <vector>
 #include <mpi.h>
+#include "DistributedAlgorithm.h"
 #include "DistributedDijkstra.h"
+#include "DistributedLeaderElection.h"
 #include "GraphData.h"
 
 int main(int argc, char** argv) {
@@ -39,10 +41,12 @@ int main(int argc, char** argv) {
 	std::cout << "Source: " << source << std::endl;
 
 	GraphData graph(world_rank, graphFile, partFile);
-	std::unique_ptr<DistributedDijkstra> algo;
+	std::unique_ptr<DistributedAlgorithm> algo;
 
 	if (algorithm == "dijkstra") {
 		algo = std::make_unique<DistributedDijkstra>(std::stoi(source));
+	} else if (algorithm == "leader") {
+		algo = std::make_unique<DistributedLeaderElection>(rounds);
 	} else {
 		std::cout << "Requested algorithm is unknown. Aborting." << std::endl;
 		MPI_Abort(MPI_COMM_WORLD, 1);
