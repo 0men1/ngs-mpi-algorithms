@@ -42,9 +42,10 @@ def generateGraph(ngs_file: str, output_file: str):
         w = edge.get("cost", 0.0)
 
         adj_list[u].append({"v": v, "w": w})
+        adj_list[v].append({"v": u, "w": w})
 
     if not checkConnected(adj_list):
-        sys.exit("The generated graph is not connected. Failed to output graph JSON")
+        sys.exit("The generated graph is not connected. Failed to output graph JSON\n")
 
     output_data = {
         "metadata": {
