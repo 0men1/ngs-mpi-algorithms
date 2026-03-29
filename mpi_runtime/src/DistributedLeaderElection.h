@@ -1,5 +1,6 @@
 #pragma once
 
+#include <unordered_map>
 #ifndef __DISTRIBUTED_LEADER_ELECTION_H__
 #define __DISTRIBUTED_LEADER_ELECTION_H__
 
@@ -17,8 +18,12 @@ public:
 	void reportMetrics() const override;
 
 private:
-
 	int m_rounds;
+	int m_numIterations;
+	int m_numMessages;
+	int m_bytesSent;
+	std::unordered_map<int, int> m_finalLeaders;
+	std::chrono::duration<double> m_totalRuntime;
 };
 
 #endif //__DISTRIBUTED_DIJKSTRA_H__

@@ -4,7 +4,6 @@
 #define __GRAPHDATA_H__
 
 #include <unordered_map>
-#include <iostream>
 #include <vector>
 
 struct Edge {
@@ -15,9 +14,7 @@ struct Edge {
 class GraphData {
 public:
 	GraphData(int rankId, std::string& graphFile, std::string partFile): m_rankId(rankId) {
-		std::cout << "Loading files" << std::endl;
 		loadData(graphFile, partFile);
-		std::cout << "Successfully loaded graph data for rank #" << rankId <<  std::endl;
 	}
 
 	const int m_rankId;

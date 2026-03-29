@@ -34,12 +34,6 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	std::cout << "Graph: " << graphFile << std::endl;
-	std::cout << "Partition: " << partFile << std::endl;
-	std::cout << "Algorithm: " << algorithm << std::endl;
-	std::cout << "Rounds: " << rounds << std::endl;
-	std::cout << "Source: " << source << std::endl;
-
 	GraphData graph(world_rank, graphFile, partFile);
 	std::unique_ptr<DistributedAlgorithm> algo;
 
@@ -54,8 +48,6 @@ int main(int argc, char** argv) {
 
 	algo->execute(graph);
 	algo->reportMetrics();
-
-	std::cout << "Finished running MPI runtime" << std::endl;
 
 	MPI_Finalize();
 	return 0;

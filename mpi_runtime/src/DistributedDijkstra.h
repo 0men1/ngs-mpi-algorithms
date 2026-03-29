@@ -22,6 +22,8 @@ private:
 	int m_sourceNode;
 	int m_numIterations;
 	int m_numMessages;
+	int m_bytesSent;
+	std::vector<float> m_distances;
 	std::chrono::duration<double> m_totalRuntime;
 };
 
