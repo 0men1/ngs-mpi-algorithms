@@ -1,7 +1,37 @@
 #!/bin/bash
 
-config_file=${1:-configs/defconfig.conf}
-output_file=${2:-outputs/graph.json}
+config_file=configs/defconfig.conf
+output_file=outputs/graph.json
+
+Help()
+{
+   # Display Help
+   echo "Add description of the script functions here."
+   echo
+   echo "Syntax: ./tools/graph_export/run.sh [-c|o|h]"
+   echo "options:"
+   echo "c     Sets the path to config file for NGS."
+   echo "o     Sets the path to output graph.json"
+   echo "h     Prints Help."
+   echo
+}
+
+
+while getopts ":c:o:h" option; do
+	case $option in 
+		h) # help
+			Help
+			exit;;
+		c)
+			config_file=$OPTARG;;
+		o)
+			output_file=$OPTARG;;
+		/?)
+			echo "Error: Invalid option"
+			exit;;
+	esac
+done
+
 
 # Generate the graph using NGS
 ngs_graph_file="raw_ngs_graph"
