@@ -1,3 +1,7 @@
+DEFAULT README. REPORT INC SOON...
+
+
+
 # NetGameSim to MPI Distributed Algorithms Project
 
 This project uses synthetic network graphs as the input for a distributed MPI application that runs two classic distributed algorithms on a graph that is partitioned across multiple MPI ranks. You will use NetGameSim to generate random graphs with controlled properties, assign edge weights, partition the graph across ranks, then run leader election and shortest path computations using message passing between ranks.

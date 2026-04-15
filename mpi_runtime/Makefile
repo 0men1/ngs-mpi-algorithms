@@ -1,3 +1,3 @@
 run_test: 
 	cmake -B build && cmake --build build
-	./build/run_test
+	mpirun -n 2 ./build/run_test

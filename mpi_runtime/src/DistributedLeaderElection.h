@@ -16,6 +16,9 @@ public:
 	DistributedLeaderElection(int rounds): m_rounds(rounds) {}
 	void execute(GraphData &graph) override;
 	void reportMetrics() const override;
+	std::unordered_map<int, int> getFinalLeaders() {
+		return m_finalLeaders;
+	}
 
 private:
 	int m_rounds;

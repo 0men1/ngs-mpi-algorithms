@@ -4,6 +4,7 @@
 #define __GRAPHDATA_H__
 
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 struct Edge {
@@ -20,6 +21,8 @@ public:
 	const int m_rankId;
 	std::vector<int> m_nodeOwnership;
 	std::unordered_map<int, std::vector<Edge>> m_adjList;
+	std::unordered_map<int, std::vector<Edge>> m_incomingEdges;
+	std::unordered_set<int> m_ownedNodes;
 
 private:
 	void loadData(std::string &graphFile, std::string &partFile);

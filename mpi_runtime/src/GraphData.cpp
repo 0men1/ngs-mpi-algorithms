@@ -8,12 +8,6 @@
 
 using json = nlohmann::json;
 
-/*
-	const int m_rankId;
-	std::vector<int> m_nodeOwnership;
-	std::unordered_map<int, std::vector<Edge>> m_adjList;
-*/
-
 void GraphData::loadData(std::string &graphFile, std::string &partFile) {
 	std::ifstream graph_file(graphFile);
 	std::ifstream part_file(partFile);
@@ -31,14 +25,24 @@ void GraphData::loadData(std::string &graphFile, std::string &partFile) {
 
 	for (int i = 0; i < numNodes; i++) {
 		std::string node_key = std::to_string(i);
-		int ownerRank = part_json[node_key];
 		m_nodeOwnership[i] = part_json[node_key];
+		if (m_nodeOwnership[i] == m_rankId) {
+			m_ownedNodes.insert(i);
+		}
+	}
 
-		if (ownerRank == m_rankId) {
-			for (const auto& edge : graph_json["adjacency_list"][node_key]) {
-				int v = edge["v"];
-				float w = edge["w"];
-				m_adjList[i].push_back(Edge{v, w});
+	for (int src = 0; src < numNodes; src++) {
+		std::string src_key = std::to_string(src);
+		for (const auto& edge : graph_json["adjacency_list"][src_key]) {
+			int dst = edge["v"];
+			float w = edge["w"];
+
+			if (m_nodeOwnership[src] == m_rankId) {
+				m_adjList[src].push_back(Edge{dst, w});
+			}
+
+			if (m_nodeOwnership[dst] == m_rankId) {
+				m_incomingEdges[dst].push_back(Edge{src, w});
 			}
 		}
 	}

@@ -35,7 +35,7 @@ void DistributedDijkstra::execute(GraphData& graph) {
 		local_min.distance = std::numeric_limits<float>::infinity();
 		local_min.nodeId = -1;
 
-		for (const auto & [u, edges] : graph.m_adjList) {
+		for (int u : graph.m_ownedNodes) {
 			if (!settled[u] && (distances[u] < local_min.distance)) {
 				local_min.distance = distances[u];
 				local_min.nodeId = u;
@@ -90,6 +90,15 @@ void DistributedDijkstra::execute(GraphData& graph) {
 			for (const auto& msg : incMsgs) {
 				if (msg.dist < distances[msg.nodeId]) {
 					distances[msg.nodeId] = msg.dist;
+					auto it = graph.m_incomingEdges.find(msg.nodeId);
+					if (it != graph.m_incomingEdges.end()) {
+						for (const Edge& edge : it->second) {
+							float newDist = msg.dist + edge.weight;
+							if (newDist < distances[edge.dest]) {
+								distances[edge.dest] = newDist;
+							}
+						}
+					}
 				}
 			}
 		}
