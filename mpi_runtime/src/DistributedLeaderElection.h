@@ -20,6 +20,10 @@ public:
 		return m_finalLeaders;
 	}
 
+	int getNumMessagesSent() const { return m_numMessages; }
+	int getNumBytesSent() const { return m_bytesSent; }
+	int getNumIterations() const { return m_numIterations; }
+
 private:
 	int m_rounds;
 	int m_numIterations;

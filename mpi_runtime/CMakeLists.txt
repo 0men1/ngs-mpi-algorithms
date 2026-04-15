@@ -23,18 +23,26 @@ target_link_libraries(ngs_mpi PRIVATE MPI::MPI_CXX nlohmann_json::nlohmann_json)
 
 enable_testing()
 
-add_executable(run_test)
-
-target_sources(run_test PRIVATE
-	tests/test_main.cpp
+# Dijkstra and GraphData tests
+add_executable(run_test_dijkstra)
+target_sources(run_test_dijkstra PRIVATE
+	tests/test_dijkstra.cpp
 	src/GraphData.cpp
 	src/DistributedDijkstra.cpp
 	src/DistributedLeaderElection.cpp
 )
+target_include_directories(run_test_dijkstra PRIVATE include src)
+target_link_libraries(run_test_dijkstra PRIVATE GTest::GTest GTest::Main MPI::MPI_CXX nlohmann_json::nlohmann_json)
+add_test(NAME DijkstraTests COMMAND run_test_dijkstra)
 
-target_include_directories(run_test PRIVATE include src)
-target_link_libraries(run_test PRIVATE GTest::GTest GTest::Main MPI::MPI_CXX)
-
-add_test(NAME run_test COMMAND run_test)
-
-target_link_libraries(run_test PRIVATE nlohmann_json::nlohmann_json)
+# Leader Election tests
+add_executable(run_test_leaderelection)
+target_sources(run_test_leaderelection PRIVATE
+	tests/test_leaderelection.cpp
+	src/GraphData.cpp
+	src/DistributedDijkstra.cpp
+	src/DistributedLeaderElection.cpp
+)
+target_include_directories(run_test_leaderelection PRIVATE include src)
+target_link_libraries(run_test_leaderelection PRIVATE GTest::GTest GTest::Main MPI::MPI_CXX nlohmann_json::nlohmann_json)
+add_test(NAME LeaderElectionTests COMMAND run_test_leaderelection)

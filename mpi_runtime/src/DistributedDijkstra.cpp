@@ -42,7 +42,8 @@ void DistributedDijkstra::execute(GraphData& graph) {
 			}
 		}
 
-		MPI_Allreduce(&local_min, &global_min, 1, MPI_FLOAT_INT, MPI_MINLOC, MPI_COMM_WORLD);
+		MPI_Allreduce(&local_min, &global_min, 
+			1, MPI_FLOAT_INT, MPI_MINLOC, MPI_COMM_WORLD);
 
 		if (global_min.distance == std::numeric_limits<float>::infinity()) {
 		    break;
@@ -78,14 +79,16 @@ void DistributedDijkstra::execute(GraphData& graph) {
 			for (int r =0; r < rankSize; r++) {
 				if (r != rank && sendCounts[r] > 0) {
 					int bytes = sendCounts[r] * sizeof(UpdateMsg);
-					MPI_Send(outMsgs[r].data(), bytes, MPI_BYTE, r, 0, MPI_COMM_WORLD);
+					MPI_Send(outMsgs[r].data(), bytes, 
+	      					MPI_BYTE, r, 0, MPI_COMM_WORLD);
 					m_numMessages++;
 					m_bytesSent += bytes;
 				}
 			}
 		} else if (sendCounts[rank] > 0) {
 			std::vector<UpdateMsg> incMsgs(sendCounts[rank]);
-			MPI_Recv(incMsgs.data(), sendCounts[rank] * sizeof(UpdateMsg), MPI_BYTE, globalRank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			MPI_Recv(incMsgs.data(), sendCounts[rank] * sizeof(UpdateMsg), 
+	    			MPI_BYTE, globalRank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
 			for (const auto& msg : incMsgs) {
 				if (msg.dist < distances[msg.nodeId]) {
@@ -121,7 +124,8 @@ void DistributedDijkstra::reportMetrics() const {
     MPI_Reduce(&m_bytesSent, &globalBytes, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
     std::vector<float> globalDistances(m_distances.size());
-    MPI_Reduce(m_distances.data(), globalDistances.data(), m_distances.size(), MPI_FLOAT, MPI_MIN, 0, MPI_COMM_WORLD);
+    MPI_Reduce(m_distances.data(), globalDistances.data(), 
+	       m_distances.size(), MPI_FLOAT, MPI_MIN, 0, MPI_COMM_WORLD);
 
     if (rank == 0) {
         printf("\n================ DIJKSTRA METRICS ================\n");
