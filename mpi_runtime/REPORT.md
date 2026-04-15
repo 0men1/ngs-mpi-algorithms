@@ -5,9 +5,12 @@
 2. [Architectural Design](#architectural-design)
 3. [Algorithm Choices](#algorithm-choices)
 4. [Implementation Details](#implementation-details)
-5. [Experimental Design](#experimental-design)
-6. [Results and Analysis](#results-and-analysis)
-7. [Key Insights and Decisions](#key-insights-and-decisions)
+5. [Data Formats](#data-formats)
+6. [Partition Model](#partition-model)
+7. [Assumptions for Correctness](#assumptions-for-correctness)
+8. [Experimental Design](#experimental-design)
+9. [Results and Analysis](#results-and-analysis)
+10. [Key Insights and Decisions](#key-insights-and-decisions)
 
 ---
 
@@ -177,6 +180,219 @@ The project uses CMake with the following structure:
 
 ---
 
+## Data Formats
+
+### Graph Input Format (JSON)
+
+The graph is stored in JSON format with the following structure:
+
+```json
+{
+  "metadata": {
+    "num_nodes": <integer>  // Total number of nodes in the graph
+  },
+  "adjacency_list": {
+    "<node_id>": [           // Node ID as string key
+      {
+        "v": <integer>,     // Destination node ID
+        "w": <float>        // Edge weight
+      },
+      ...
+    ],
+    ...
+  }
+}
+```
+
+**Example:**
+```json
+{
+  "metadata": { "num_nodes": 4 },
+  "adjacency_list": {
+    "0": [{ "v": 1, "w": 0.5 }, { "v": 2, "w": 0.2 }],
+    "1": [{ "v": 0, "w": 0.5 }],
+    "2": [{ "v": 0, "w": 0.2 }, { "v": 3, "w": 0.4 }],
+    "3": [{ "v": 2, "w": 0.4 }]
+  }
+}
+```
+
+### Partition Format (JSON)
+
+The partition defines node ownership across MPI ranks:
+
+```json
+{
+  "<node_id>": <rank_id>,
+  ...
+}
+```
+
+**Example:**
+```json
+{
+  "0": 0,
+  "1": 0,
+  "2": 1,
+  "3": 1
+}
+```
+
+This partition assigns nodes 0-1 to rank 0 and nodes 2-3 to rank 1.
+
+### Message Formats
+
+#### Dijkstra UpdateMsg
+
+```cpp
+struct UpdateMsg {
+    int nodeId;      // Target node for distance update (4 bytes)
+    float dist;      // New distance value (4 bytes)
+};
+// Total: 8 bytes per message
+```
+
+Serialization: Raw byte transfer via `MPI_BYTE`
+
+#### Leader Election ElectMsg
+
+```cpp
+struct ElectMsg {
+    int destNode;    // Destination node ID (4 bytes)
+    int maxNodeId;   // Maximum ID being propagated (4 bytes)
+};
+// Total: 8 bytes per message
+```
+
+Serialization: Raw byte transfer via `MPI_BYTE`
+
+### MPI Datatypes
+
+| Message Type | MPI Datatype | Rationale |
+|-------------|--------------|-----------|
+| UpdateMsg | `MPI_BYTE` | Custom struct, sent as raw bytes |
+| ElectMsg | `MPI_BYTE` | Custom struct, sent as raw bytes |
+| Distance array | `MPI_FLOAT` | Standard float array |
+| Node IDs | `MPI_INT` | Standard integer array |
+
+---
+
+## Partition Model
+
+### Ownership Model
+
+The partition model uses **node-based ownership** where:
+
+1. Each node is assigned to exactly one MPI rank
+2. The owning rank is responsible for:
+   - Storing the distance/leader value for that node
+   - Initiating updates when this node is settled (Dijkstra)
+   - Including this node in local minimum computations
+3. Non-owning ranks track information about nodes they do not own
+
+### Edge Storage Strategy
+
+To support distributed computation, each rank maintains two edge views:
+
+| Data Structure | Purpose | Edges Stored |
+|---------------|---------|--------------|
+| `m_adjList` | Outgoing edges for sending updates | Edges where rank owns SOURCE node |
+| `m_incomingEdges` | Incoming edges for processing updates | Edges where rank owns DESTINATION node |
+
+### Why Two Edge Views?
+
+Consider a graph edge from node A (rank 0) to node B (rank 1):
+
+```
+Rank 0: owns node A
+  - Must send updates about B when A is settled
+  - Stores edge in m_adjList[A]
+
+Rank 1: owns node B
+  - Must receive and process updates about B
+  - Stores edge in m_incomingEdges[B]
+```
+
+This design ensures each rank can:
+- Send updates for nodes it owns (via m_adjList)
+- Process updates received for nodes it owns (via m_incomingEdges)
+
+### Partition File Requirements
+
+1. Every node ID from 0 to (num_nodes - 1) must appear exactly once
+2. All rank values must be valid MPI ranks (0 to size-1)
+3. Partition files are JSON for human readability
+
+**TODO: Add partition balancing guidelines**
+
+---
+
+## Assumptions for Correctness
+
+### Dijkstra Algorithm Assumptions
+
+**CRITICAL: These assumptions are required for correctness**
+
+1. **Positive Edge Weights**
+   - All edge weights must be non-negative (w >= 0)
+   - Reason: Dijkstra's algorithm fails with negative weights
+   - The algorithm uses infinity as initial distance, which only works with positive weights
+   - Impact: If negative weights exist, the algorithm may produce incorrect shortest paths
+
+2. **Connected Graph**
+   - The graph should be connected (or at least the source node should reach all target nodes)
+   - Unreachable nodes will have distance = infinity
+   - This is expected behavior, not an error
+
+3. **No Self-Loops Required**
+   - Self-loops are ignored in the current implementation
+   - Does not affect correctness
+
+4. **Undirected Edges Implicit**
+   - The adjacency list stores directed edges
+   - For undirected graphs, each direction must be explicitly added
+   - Example: An undirected edge between 0 and 1 requires entries in both "0" and "1" lists
+
+5. **Synchronous Communication**
+   - The algorithm uses blocking MPI calls (MPI_Send, MPI_Recv)
+   - All ranks must participate in the synchronization
+   - Deadlock occurs if ranks diverge in control flow
+
+### Leader Election Algorithm Assumptions
+
+1. **Unique Node IDs**
+   - All node IDs must be unique integers
+   - The algorithm elects the maximum ID, which requires uniqueness
+
+2. **Sufficient Rounds**
+   - The algorithm requires at least (graph diameter) rounds to converge
+   - With fewer rounds, nodes may not agree on the leader
+   - The number of rounds must be specified explicitly
+
+3. **Connected Graph**
+   - The graph must be connected for all nodes to receive max values
+   - In disconnected graphs, each component will elect its own maximum
+
+4. **Bidirectional Communication**
+   - For complete convergence, edges should be traversable in both directions
+   - The partition must allow messages to flow across the graph
+
+### General MPI Assumptions
+
+1. **Reliable Communication**
+   - MPI does not lose messages in normal operation
+   - No error handling for communication failures
+
+2. **Synchronized Termination**
+   - All ranks must call MPI_Finalize together
+   - Premature termination on one rank causes errors on others
+
+3. **Consistent Partition Files**
+   - All ranks must use the same partition file
+   - Inconsistent partitions cause undefined behavior
+
+---
+
 ## Experimental Design
 
 ### Hypothesis
@@ -189,13 +405,17 @@ The leader election algorithm will converge to the maximum node ID across all pa
 
 ### Test Cases
 
-**Dijkstra Tests (4 tests):**
+**Dijkstra Tests (8 tests):**
 1. Convergence verification
 2. Source distance verification (node 0 = 0.0)
 3. Cross-partition distance verification (nodes 5, 9 on rank 1)
 4. Alternative source node testing
+5. Simple graph correctness verification
+6. Owned nodes have finite distances
+7. Message tracking metrics
+8. Edge weights are non-negative (correctness assumption)
 
-**Leader Election Tests (7 tests):**
+**Leader Election Tests (10 tests):**
 1. Convergence verification
 2. Maximum node ID election
 3. Simple graph verification
@@ -203,6 +423,9 @@ The leader election algorithm will converge to the maximum node ID across all pa
 5. Ownership coverage
 6. Cross-rank agreement
 7. Metric tracking
+8. Iteration count tracking
+9. Leader is valid node ID verification
+10. Maximum rounds stress test
 
 ### Expected Results
 
@@ -216,15 +439,77 @@ The leader election algorithm will converge to the maximum node ID across all pa
 - All ranks should agree on the same leader value
 - Election should complete within graph diameter rounds
 
+### Reproducing Experiments
+
+**Quick Test (5 seconds):**
+```bash
+cd mpi_runtime
+make run_test
+```
+
+This runs all 15 tests with 2 MPI ranks and verifies correctness.
+
+**Detailed Test Output:**
+```bash
+mpirun -n 2 ./build/run_test_dijkstra --gtest_output=xml:test_results.xml
+mpirun -n 2 ./build/run_test_leaderelection --gtest_output=xml:test_results.xml
+```
+
+**Running with Different MPI Sizes:**
+```bash
+# Test with 4 ranks
+mpirun -n 4 ./build/run_test_dijkstra
+mpirun -n 4 ./build/run_test_leaderelection
+```
+
+**Creating Custom Experiments:**
+
+1. Create a graph file (e.g., `my_graph.json`):
+```json
+{
+  "metadata": { "num_nodes": 6 },
+  "adjacency_list": {
+    "0": [{ "v": 1, "w": 1.0 }, { "v": 2, "w": 2.0 }],
+    "1": [{ "v": 0, "w": 1.0 }, { "v": 3, "w": 1.0 }],
+    "2": [{ "v": 0, "w": 2.0 }, { "v": 4, "w": 1.0 }],
+    "3": [{ "v": 1, "w": 1.0 }, { "v": 5, "w": 2.0 }],
+    "4": [{ "v": 2, "w": 1.0 }, { "v": 5, "w": 1.0 }],
+    "5": [{ "v": 3, "w": 2.0 }, { "v": 4, "w": 1.0 }]
+  }
+}
+```
+
+2. Create a partition file (e.g., `my_part.json`):
+```json
+{ "0": 0, "1": 0, "2": 0, "3": 1, "4": 1, "5": 1 }
+```
+
+3. Build with custom files:
+```bash
+./build/ngs_mpi my_graph.json my_part.json
+```
+
+**Expected Shortest Paths (source=0):**
+- Node 0: 0.0
+- Node 1: 1.0 (direct edge)
+- Node 2: 2.0 (direct edge)
+- Node 3: 2.0 (0->1->3)
+- Node 4: 3.0 (0->2->4)
+- Node 5: 3.0 (0->1->3->5 or 0->2->4->5)
+
+**Expected Leader Election:**
+- Maximum node ID is 5, so all nodes should elect node 5 as leader
+
 ---
 
 ## Results and Analysis
 
 ### Test Results Summary
 
-**Dijkstra Tests:** 4/4 PASSED
-**Leader Election Tests:** 7/7 PASSED
-**Total:** 11/11 PASSED
+**Dijkstra Tests:** 8/8 PASSED
+**Leader Election Tests:** 10/10 PASSED
+**GraphData Tests:** 4/4 PASSED
+**Total:** 22/22 PASSED
 
 **TODO: Add detailed performance metrics (execution time, message counts)**
 
@@ -323,14 +608,14 @@ mpi_runtime/
 │   └── DistributedAlgorithm.h
 ├── tests/
 │   ├── test_dijkstra.cpp
-│   └── test_leaderelection.cpp
-└── ../outputs/tests/
-    ├── testgraph1.json
-    ├── testpart1.json
-    ├── simple_graph.json
-    ├── simple_part.json
-    ├── chain_graph.json
-    └── chain_part.json
+│   ├── test_leaderelection.cpp
+│   └── test_graphs/
+│       ├── testgraph1.json
+│       ├── testpart1.json
+│       ├── simple_graph.json
+│       ├── simple_part.json
+│       ├── chain_graph.json
+│       └── chain_part.json
 ```
 
 ### Build Instructions

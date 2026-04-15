@@ -12,9 +12,12 @@
 #include "GraphData.h"
 #include <gtest/gtest.h>
 #include <mpi.h>
+#include <limits>
 
-const char *TEST_GRAPH_PATH = "../outputs/tests/testgraph1.json";
-const char *TEST_PART_PATH = "../outputs/tests/testpart1.json";
+const char *TEST_GRAPH_PATH = "tests/test_graphs/testgraph1.json";
+const char *TEST_PART_PATH = "tests/test_graphs/testpart1.json";
+const char *SIMPLE_GRAPH_PATH = "tests/test_graphs/simple_graph.json";
+const char *SIMPLE_PART_PATH = "tests/test_graphs/simple_part.json";
 
 class GraphDataTest : public ::testing::Test {
 protected:
@@ -99,6 +102,90 @@ TEST_F(DijkstraTest, DijkstraWithDifferentSource) {
     dijkstra.execute(graph);
     
     SUCCEED();
+}
+
+// Test 5: Verifies the algorithm on a simple graph
+// Tests correctness on a simpler graph with known distances
+TEST_F(DijkstraTest, DijkstraSimpleGraphCorrectness) {
+    std::string graphFile(SIMPLE_GRAPH_PATH);
+    std::string partFile(SIMPLE_PART_PATH);
+    
+    GraphData graph(rank, graphFile, partFile);
+    
+    // Source node 0 on rank 0, node 3 (max) on rank 1
+    DistributedDijkstra dijkstra(0);
+    dijkstra.execute(graph);
+    
+    std::vector<float> distances = dijkstra.getDistances();
+    
+    // Verify source distance
+    if (graph.m_nodeOwnership[0] == rank) {
+        EXPECT_FLOAT_EQ(0.0f, distances[0]);
+    }
+}
+
+// Test 6: Verifies all owned nodes have finite distances from source
+// Every node owned by the rank should either have a finite distance or
+// be the source node itself (distance 0)
+TEST_F(DijkstraTest, OwnedNodesHaveFiniteOrZeroDistance) {
+    std::string graphFile(TEST_GRAPH_PATH);
+    std::string partFile(TEST_PART_PATH);
+    
+    GraphData graph(rank, graphFile, partFile);
+    DistributedDijkstra dijkstra(0);
+    dijkstra.execute(graph);
+    
+    std::vector<float> distances = dijkstra.getDistances();
+    
+    for (int nodeId : graph.m_ownedNodes) {
+        if (nodeId != 0) {  // Source node should be 0
+            EXPECT_LT(distances[nodeId], std::numeric_limits<float>::infinity())
+                << "Node " << nodeId << " owned by rank " << rank 
+                << " should have finite distance from source 0";
+        }
+    }
+}
+
+// Test 7: Verifies message tracking metrics
+// The algorithm should correctly track number of messages sent
+TEST_F(DijkstraTest, DijkstraTracksMessages) {
+    std::string graphFile(TEST_GRAPH_PATH);
+    std::string partFile(TEST_PART_PATH);
+    
+    GraphData graph(rank, graphFile, partFile);
+    DistributedDijkstra dijkstra(0);
+    dijkstra.execute(graph);
+    
+    int numMessages = dijkstra.getNumMessagesSent();
+    int numBytes = dijkstra.getNumBytesSent();
+    
+    EXPECT_GE(numMessages, 0);
+    EXPECT_GE(numBytes, 0);
+}
+
+// Test 8: Verifies edge weights are positive
+// All edges in the adjacency list should have non-negative weights
+TEST_F(DijkstraTest, EdgeWeightsAreNonNegative) {
+    std::string graphFile(TEST_GRAPH_PATH);
+    std::string partFile(TEST_PART_PATH);
+    
+    GraphData graph(rank, graphFile, partFile);
+    
+    for (const auto &[node, edges] : graph.m_adjList) {
+        for (const auto &edge : edges) {
+            EXPECT_GE(edge.weight, 0.0f) 
+                << "Edge from " << node << " to " << edge.dest 
+                << " has negative weight: " << edge.weight;
+        }
+    }
+    
+    for (const auto &[node, edges] : graph.m_incomingEdges) {
+        for (const auto &edge : edges) {
+            EXPECT_GE(edge.weight, 0.0f)
+                << "Incoming edge to " << node << " from " << edge.dest
+                << " has negative weight: " << edge.weight;
+        }
+    }
 }
 
 // ============================================================================

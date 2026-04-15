@@ -5,7 +5,7 @@
  * The algorithm uses a distributed approach to elect a leader node by propagating
  * the maximum node ID through the graph over multiple rounds.
  * 
- * Total Tests: 7
+ * Total Tests: 10
  */
 
 #include "DistributedLeaderElection.h"
@@ -13,12 +13,12 @@
 #include <gtest/gtest.h>
 #include <mpi.h>
 
-const char *TEST_GRAPH_PATH = "../outputs/tests/testgraph1.json";
-const char *TEST_PART_PATH = "../outputs/tests/testpart1.json";
-const char *SIMPLE_GRAPH_PATH = "../outputs/tests/simple_graph.json";
-const char *SIMPLE_PART_PATH = "../outputs/tests/simple_part.json";
-const char *CHAIN_GRAPH_PATH = "../outputs/tests/chain_graph.json";
-const char *CHAIN_PART_PATH = "../outputs/tests/chain_part.json";
+const char *TEST_GRAPH_PATH = "tests/test_graphs/testgraph1.json";
+const char *TEST_PART_PATH = "tests/test_graphs/testpart1.json";
+const char *SIMPLE_GRAPH_PATH = "tests/test_graphs/simple_graph.json";
+const char *SIMPLE_PART_PATH = "tests/test_graphs/simple_part.json";
+const char *CHAIN_GRAPH_PATH = "tests/test_graphs/chain_graph.json";
+const char *CHAIN_PART_PATH = "tests/test_graphs/chain_part.json";
 
 class LeaderElectionTest : public ::testing::Test {
 protected:
@@ -154,6 +154,60 @@ TEST_F(LeaderElectionTest, LeaderElectionMetrics) {
     
     EXPECT_GE(numMsgs, 0);
     EXPECT_GE(numBytes, 0);
+}
+
+// Test 8: Verifies the algorithm tracks iteration count correctly
+// The number of iterations should equal the number of rounds executed
+TEST_F(LeaderElectionTest, LeaderElectionTracksIterations) {
+    std::string graphFile(SIMPLE_GRAPH_PATH);
+    std::string partFile(SIMPLE_PART_PATH);
+    GraphData graph(rank, graphFile, partFile);
+    
+    int rounds = 5;
+    DistributedLeaderElection election(rounds);
+    election.execute(graph);
+    
+    int iterations = election.getNumIterations();
+    EXPECT_EQ(iterations, rounds);
+}
+
+// Test 9: Verifies that leader is always a valid node ID in the graph
+// The elected leader must be one of the nodes that exists in the graph
+TEST_F(LeaderElectionTest, LeaderIsValidNodeId) {
+    std::string graphFile(TEST_GRAPH_PATH);
+    std::string partFile(TEST_PART_PATH);
+    GraphData graph(rank, graphFile, partFile);
+    int maxNodeId = 9;
+    
+    DistributedLeaderElection election(10);
+    election.execute(graph);
+    
+    std::unordered_map<int, int> finalLeaders = election.getFinalLeaders();
+    
+    for (const auto& [node, leader] : finalLeaders) {
+        EXPECT_GE(leader, 0) << "Leader ID cannot be negative";
+        EXPECT_LE(leader, maxNodeId) << "Leader ID exceeds maximum node ID";
+    }
+}
+
+// Test 10: Verifies leader election with maximum rounds
+// Running for many rounds should still produce correct results
+TEST_F(LeaderElectionTest, LeaderElectionWithMaxRounds) {
+    std::string graphFile(SIMPLE_GRAPH_PATH);
+    std::string partFile(SIMPLE_PART_PATH);
+    GraphData graph(rank, graphFile, partFile);
+    int expectedLeader = 3;
+    
+    DistributedLeaderElection election(100);
+    election.execute(graph);
+    
+    std::unordered_map<int, int> finalLeaders = election.getFinalLeaders();
+    
+    for (const auto& [node, leader] : finalLeaders) {
+        EXPECT_EQ(leader, expectedLeader) 
+            << "Node " << node << " has leader " << leader 
+            << " but expected " << expectedLeader;
+    }
 }
 
 int main(int argc, char **argv) {
