@@ -21,8 +21,8 @@ def checkConnected(adj_list: dict) -> bool:
     return len(visited) == len(adj_list)
 
 
-def generateGraph(ngs_file: str, output_file: str):
-    print(f"Generating graph. NGS file: {ngs_file}")
+def generateGraph(ngs_file: str, output_file: str, seed: int = 0):
+    print(f"Generating graph. NGS file: {ngs_file}, seed: {seed}")
 
     adj_list = {}
 
@@ -49,7 +49,8 @@ def generateGraph(ngs_file: str, output_file: str):
 
     output_data = {
         "metadata": {
-            "num_nodes": len(adj_list)
+            "num_nodes": len(adj_list),
+            "seed": seed
         },
         "adjacency_list": adj_list
     }
@@ -61,12 +62,14 @@ def generateGraph(ngs_file: str, output_file: str):
 
 def main():
     print("Running enrichment")
-    if len(sys.argv) != 3:
-        sys.exit("Usage: python enrich.py <input.ngs> <output.json>")
+    if len(sys.argv) < 3:
+        sys.exit("Usage: python enrich.py <input.ngs> <output.json> [seed]")
 
     ngs_file: str = sys.argv[1]
     output_file: str = sys.argv[2]
-    generateGraph(ngs_file, output_file)
+    seed: int = int(sys.argv[3]) if len(sys.argv) > 3 else 0
+
+    generateGraph(ngs_file, output_file, seed)
 
 if __name__ == "__main__":
     main()
