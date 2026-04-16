@@ -21,17 +21,23 @@ int main(int argc, char** argv) {
 
 	std::vector<std::string> args(argv, argv+argc);
 	for (int i = 1; i < args.size(); i++) {
-		if (args[i] == "--graph") {
+		if (args[i] == "--graph" || args[i] == "-g") {
 			graphFile = args[++i];
-		} else if (args[i] == "--part") {
+		} else if (args[i] == "--part" || args[i] == "-p") {
 			partFile = args[++i];
-		} else if (args[i] == "--rounds") {
+		} else if (args[i] == "--rounds" || args[i] == "-r") {
 			rounds = std::stoi(args[++i]);
-		} else if (args[i] == "--algorithm") {
+		} else if (args[i] == "--algo" || args[i] == "--algorithm" || args[i] == "-a") {
 			algorithm = args[++i];
-		} else if (args[i] == "--source") {
+		} else if (args[i] == "--source" || args[i] == "-s") {
 			source = args[++i];
+		} else {
+			std::cerr << "Unknown argument: " << args[i] << std::endl;
 		}
+	}
+
+	if (world_rank == 0) {
+		std::cout << "Algorithm: " << algorithm << ", Rounds: " << rounds << ", Source: " << source << std::endl;
 	}
 
 	GraphData graph(world_rank, graphFile, partFile);
