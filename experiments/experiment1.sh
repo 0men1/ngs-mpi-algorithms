@@ -2,23 +2,42 @@
 
 # Experiment 1: 100 nodes with 5 MPI ranks
 # Compare scaling with more partitions
+#
+# Prerequisites:
+# - Ensure MPI runtime is built at ../mpi_runtime/build/ngs_mpi
+# - Graphs should exist in ./graphs/ directory
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+GRAPH="${SCRIPT_DIR}/graphs/exp1_100nodes.json"
+PART="${SCRIPT_DIR}/graphs/exp1_100nodes_part.json"
+MPIEXEC="${SCRIPT_DIR}/../mpi_runtime/build/ngs_mpi"
 
 echo "=========================================="
 echo "Experiment 1: 100 Nodes / 5 Ranks"
 echo "=========================================="
 
-cd /Users/homenhoma/dev_projects/class/CS453/mpi_runtime
+if [ ! -f "$GRAPH" ]; then
+    echo "Error: Graph file not found: $GRAPH"
+    echo "Please run graph generation first"
+    exit 1
+fi
 
-GRAPH="../outputs/exp1_100nodes.json"
-PART="../outputs/exp1_100nodes_part.json"
+if [ ! -f "$MPIEXEC" ]; then
+    echo "Error: MPI executable not found: $MPIEXEC"
+    echo "Please build the MPI runtime first"
+    exit 1
+fi
+
+echo "Using graph: $GRAPH"
+echo "Using partition: $PART"
 
 echo ""
 echo "--- Running Leader Election (5 ranks) ---"
-mpirun -n 5 ./build/ngs_mpi --graph $GRAPH --part $PART --algo leader --rounds 30
+mpirun -n 5 "$MPIEXEC" --graph "$GRAPH" --part "$PART" --algo leader --rounds 30
 
 echo ""
 echo "--- Running Dijkstra (5 ranks) ---"
-mpirun -n 5 ./build/ngs_mpi --graph $GRAPH --part $PART --algo dijkstra --source 0
+mpirun -n 5 "$MPIEXEC" --graph "$GRAPH" --part "$PART" --algo dijkstra --source 0
 
 echo ""
 echo "=========================================="
