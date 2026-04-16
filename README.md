@@ -121,37 +121,85 @@ mpirun -n 2 ./build/run_test_leaderelection --gtest_filter=LeaderElectionTest.*
 
 ### Run the Main Application
 
+The main executable requires graph and partition files in JSON format. Run this from the `mpi_runtime/` directory:
+
 ```bash
-# Run with the main executable (requires graph and partition files)
-mpirun -n 2 ./build/ngs_mpi <graph_file.json> <partition_file.json>
+cd mpi_runtime
+
+# Run Dijkstra algorithm
+mpirun -n 2 ./build/ngs_mpi --graph ../outputs/graph.json --part ../outputs/part.json --algo dijkstra --source 0
+
+# Run Leader Election algorithm
+mpirun -n 2 ./build/ngs_mpi --graph ../outputs/graph.json --part ../outputs/part.json --algo leader --rounds 30
 ```
+
+**Command-line Options:**
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--graph`, `-g` | Path to graph JSON file | `../outputs/graph.json` |
+| `--part`, `-p` | Path to partition JSON file | `../outputs/part.json` |
+| `--algo`, `-a` | Algorithm to run (`dijkstra` or `leader`) | `dijkstra` |
+| `--source`, `-s` | Source node for Dijkstra | `0` |
+| `--rounds`, `-r` | Number of rounds for Leader Election | `200` |
+
+**Note:** Default paths are relative to the `mpi_runtime/` directory where the executable runs. Use absolute paths or adjust accordingly.
 
 ---
 
 ## Project Structure
 
 ```
-mpi_runtime/
-├── CMakeLists.txt           # Build configuration
-├── Makefile                 # Convenience build targets
-├── README.md                # This file
-├── REPORT.md                # Technical documentation
-├── src/                     # Source code
-│   ├── main.cpp
-│   ├── GraphData.cpp/h      # Graph loading and partitioning
-│   ├── DistributedDijkstra.cpp/h  # Shortest path algorithm
-│   ├── DistributedLeaderElection.cpp/h  # Leader election
-│   └── DistributedAlgorithm.h     # Abstract base class
-├── tests/                   # Test suites
-│   ├── test_dijkstra.cpp    # Dijkstra tests (4 tests)
-│   └── test_leaderelection.cpp  # Leader election tests (7 tests)
-└── tests/test_graphs/         # Test data
-    ├── testgraph1.json       # 10-node test graph
-    ├── testpart1.json       # Partition file
-    ├── simple_graph.json    # 4-node simple graph
-    ├── simple_part.json     # Simple partition
-    ├── chain_graph.json     # 5-node chain graph
-    └── chain_part.json      # Chain partition
+CS453/                          # Project root
+├── README.md                   # This file
+├── REPORT.md                   # Technical documentation
+├── student.txt                 # Student info
+├── CMakeLists.txt              # Build configuration
+├── configs/                    # NetGameSim configuration
+│   └── defconfig.conf          # Default config
+├── mpi_runtime/                # MPI runtime implementation
+│   ├── CMakeLists.txt          # Build configuration
+│   ├── Makefile                # Convenience build targets
+│   ├── include/               # Header files
+│   ├── src/                    # Source code
+│   │   ├── main.cpp           # Application entry point
+│   │   ├── GraphData.cpp/h    # Graph loading and partitioning
+│   │   ├── DistributedDijkstra.cpp/h  # Shortest path algorithm
+│   │   ├── DistributedLeaderElection.cpp/h  # Leader election
+│   │   └── DistributedAlgorithm.h  # Abstract base class
+│   ├── tests/                 # Test suites
+│   │   ├── test_dijkstra.cpp  # Dijkstra tests (8 tests)
+│   │   ├── test_leaderelection.cpp  # Leader election tests (10 tests)
+│   │   └── test_graphs/       # Test data
+│   │       ├── testgraph1.json    # 10-node test graph
+│   │       ├── testpart1.json    # Partition file
+│   │       ├── simple_graph.json  # 4-node simple graph
+│   │       ├── simple_part.json   # Simple partition
+│   │       ├── chain_graph.json   # 5-node chain graph
+│   │       └── chain_part.json    # Chain partition
+│   └── build/                  # Build output directory
+├── tools/                      # Utility scripts
+│   ├── graph_export/           # Graph generation tools
+│   │   ├── run.sh             # Generate graph from NetGameSim
+│   │   └── enrichment.py      # Convert NGS to JSON format
+│   └── partition/              # Graph partitioning tools
+│       ├── run.sh              # Create partition files
+│       └── partition.py        # Partition algorithm
+├── experiments/                # Experiment scripts
+│   ├── experiment1.sh         # 100 nodes / 5 ranks
+│   ├── experiment2.sh         # 50 nodes / 2 ranks
+│   ├── experiment3.sh         # 200 nodes / 10 ranks
+│   └── graphs/                 # Pre-generated experiment graphs
+│       ├── exp1_100nodes.json
+│       ├── exp1_100nodes_part.json
+│       ├── exp2_50nodes.json
+│       ├── exp2_50nodes_part.json
+│       ├── exp3_200nodes.json
+│       └── exp3_200nodes_part.json
+├── NetGameSim/                 # Graph generation library
+│   └── target/scala-3.2.2/
+│       └── netmodelsim.jar     # Pre-built JAR
+└── outputs/                    # Generated output directory
 ```
 
 ---
@@ -177,18 +225,18 @@ make run_test
 
 **Expected Output:**
 ```
-[==========] Running 8 tests from 2 test suites.
-[----------] 4 tests from DijkstraTest
+[==========] Running 12 tests from 2 test suites.
+[----------] 8 tests from DijkstraTest
 [----------] 4 tests from GraphDataTest
-[==========] 8 tests from 2 test suites ran.
-[  PASSED  ] 8 tests.
+[==========] 12 tests from 2 test suites ran.
+[  PASSED  ] 12 tests.
 
-[==========] Running 7 tests from 1 test suite.
-[----------] 7 tests from LeaderElectionTest
-[==========] 7 tests from 1 test suite ran.
-[  PASSED  ] 7 tests.
+[==========] Running 10 tests from 1 test suite.
+[----------] 10 tests from LeaderElectionTest
+[==========] 10 tests from 1 test suite ran.
+[  PASSED  ] 10 tests.
 
-Total: 15/15 tests passed
+Total: 22/22 tests passed
 ```
 
 ### Creating Custom Test Data
@@ -216,7 +264,18 @@ Total: 15/15 tests passed
 
 3. Run with the partition:
 ```bash
-mpirun -n 2 ./build/ngs_mpi my_graph.json my_partition.json
+mpirun -n 2 ./build/ngs_mpi --graph my_graph.json --part my_partition.json --algo dijkstra --source 0
+```
+
+### Running Experiments
+
+Experiments use pre-generated graphs from NetGameSim. Run these from the project root directory:
+
+```bash
+# Run all experiments (from CS453/ directory, NOT mpi_runtime/)
+./experiments/experiment1.sh  # 100 nodes, 5 ranks
+./experiments/experiment2.sh  # 50 nodes, 2 ranks
+./experiments/experiment3.sh  # 200 nodes, 10 ranks
 ```
 
 ---
