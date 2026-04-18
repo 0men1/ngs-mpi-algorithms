@@ -26,7 +26,7 @@ Distributed graph algorithms are fundamental to many real-world applications inc
 **Key Contributions:**
 - Implementation of a partition-based distributed Dijkstra algorithm with cross-partition edge handling
 - Implementation of a flooding-based distributed leader election algorithm
-- Comprehensive test suite with 22 tests covering correctness and edge cases
+- Comprehensive test suite with 29 tests covering correctness and edge cases
 - Support for arbitrary graph partitioning via JSON configuration
 - Integration with NetGameSim for large-scale graph generation
 
@@ -475,7 +475,7 @@ The leader election algorithm will converge to the maximum node ID across all pa
 
 ### Test Cases
 
-**Dijkstra Tests (8 tests):**
+**Dijkstra Tests (15 tests):**
 1. Convergence verification - Algorithm completes without errors
 2. Source distance verification - Node 0 has distance 0.0
 3. Cross-partition distance verification - Nodes 5, 9 on rank 1 have correct distances
@@ -484,6 +484,13 @@ The leader election algorithm will converge to the maximum node ID across all pa
 6. Owned nodes have finite distances
 7. Message tracking metrics
 8. Edge weights are non-negative (correctness assumption)
+9. Source 0 all distances - Verifies all distances from source 0 (testgraph1)
+10. Source 5 all distances - Verifies all distances from source 5 (testgraph1)
+11. Source 9 all distances - Verifies all distances from source 9 (testgraph1)
+12. Simple graph source 0 - All distances from source 0 (simple_graph)
+13. Simple graph source 3 - All distances from source 3 (simple_graph)
+14. Chain graph source 0 - All distances from source 0 (chain_graph)
+15. Chain graph source 2 - All distances from source 2 (chain_graph)
 
 **GraphData Tests (4 tests):**
 1. Graph and partition loading verification
@@ -601,10 +608,10 @@ Three pre-configured experiments are provided to test scalability:
 
 ### Test Results Summary
 
-**Dijkstra Tests:** 8/8 PASSED
+**Dijkstra Tests:** 15/15 PASSED
 **Leader Election Tests:** 10/10 PASSED
 **GraphData Tests:** 4/4 PASSED
-**Total:** 22/22 PASSED
+**Total:** 29/29 PASSED
 
 ### Performance Metrics (Execution Time, Message Counts)
 

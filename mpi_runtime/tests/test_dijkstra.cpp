@@ -5,7 +5,7 @@
  * The algorithm computes shortest paths from a source node to all other nodes
  * in a distributed manner using MPI communication.
  * 
- * Total Tests: 8
+ * Total Tests: 18
  */
 
 #include "DistributedDijkstra.h"
@@ -18,6 +18,8 @@ const char *TEST_GRAPH_PATH = "tests/test_graphs/testgraph1.json";
 const char *TEST_PART_PATH = "tests/test_graphs/testpart1.json";
 const char *SIMPLE_GRAPH_PATH = "tests/test_graphs/simple_graph.json";
 const char *SIMPLE_PART_PATH = "tests/test_graphs/simple_part.json";
+const char *CHAIN_GRAPH_PATH = "tests/test_graphs/chain_graph.json";
+const char *CHAIN_PART_PATH = "tests/test_graphs/chain_part.json";
 
 class GraphDataTest : public ::testing::Test {
 protected:
@@ -184,6 +186,240 @@ TEST_F(DijkstraTest, EdgeWeightsAreNonNegative) {
             EXPECT_GE(edge.weight, 0.0f)
                 << "Incoming edge to " << node << " from " << edge.dest
                 << " has negative weight: " << edge.weight;
+        }
+    }
+}
+
+// ============================================================================
+// Correctness Tests with Known Expected Distances
+// ============================================================================
+
+/*
+ * Expected distances for testgraph1.json (10 nodes):
+ * 
+ * Graph structure:
+ *   0 -- 1 -- 3 -- 7
+ *   |      \
+ *   2 -- 5 -- 9
+ *   |
+ *   6
+ * 
+ * Edge weights:
+ *   0-1: 0.5, 0-2: 0.2
+ *   1-3: 0.1, 1-4: 0.8
+ *   2-5: 0.4, 2-6: 0.7
+ *   3-7: 0.3
+ *   4-8: 0.6
+ *   5-9: 0.9
+ * 
+ * Partition: rank 0 owns nodes 0-4, rank 1 owns nodes 5-9
+ */
+
+// Test 9: Source node 0 - verifies all distances from source 0
+// Expected distances from source 0:
+//   0=0.0, 1=0.5, 2=0.2, 3=0.6, 4=1.3, 5=0.6, 6=0.9, 7=0.9, 8=1.9, 9=1.5
+TEST_F(DijkstraTest, DijkstraSource0AllDistances) {
+    std::string graphFile(TEST_GRAPH_PATH);
+    std::string partFile(TEST_PART_PATH);
+    
+    GraphData graph(rank, graphFile, partFile);
+    DistributedDijkstra dijkstra(0);
+    dijkstra.execute(graph);
+    
+    std::vector<float> distances = dijkstra.getDistances();
+    
+    // Expected distances from source 0
+    std::map<int, float> expected = {
+        {0, 0.0f}, {1, 0.5f}, {2, 0.2f}, {3, 0.6f}, {4, 1.3f},
+        {5, 0.6f}, {6, 0.9f}, {7, 0.9f}, {8, 1.9f}, {9, 1.5f}
+    };
+    
+    for (const auto &[nodeId, expectedDist] : expected) {
+        if (graph.m_nodeOwnership[nodeId] == rank) {
+            EXPECT_FLOAT_EQ(expectedDist, distances[nodeId])
+                << "Node " << nodeId << " distance mismatch from source 0";
+        }
+    }
+}
+
+// Test 10: Source node 5 - verifies all distances from source 5
+// Expected distances from source 5:
+//   5=0.0, 9=0.9, 2=0.4, 6=1.1, 0=0.6, 1=1.1, 3=1.2, 4=1.9, 7=1.5, 8=2.5
+//   Paths: 5->9(0.9), 5->2(0.4), 5->2->6(1.1), 5->2->0(0.6), 5->2->0->1(1.1)
+//          5->2->0->1->3(1.2), 5->2->0->1->4(1.9), 5->2->0->1->3->7(1.5)
+//          5->2->0->1->4->8(2.5)
+TEST_F(DijkstraTest, DijkstraSource5AllDistances) {
+    std::string graphFile(TEST_GRAPH_PATH);
+    std::string partFile(TEST_PART_PATH);
+    
+    GraphData graph(rank, graphFile, partFile);
+    DistributedDijkstra dijkstra(5);
+    dijkstra.execute(graph);
+    
+    std::vector<float> distances = dijkstra.getDistances();
+    
+    // Expected distances from source 5
+    std::map<int, float> expected = {
+        {5, 0.0f}, {9, 0.9f}, {2, 0.4f}, {6, 1.1f}, {0, 0.6f},
+        {1, 1.1f}, {3, 1.2f}, {4, 1.9f}, {7, 1.5f}, {8, 2.5f}
+    };
+    
+    for (const auto &[nodeId, expectedDist] : expected) {
+        if (graph.m_nodeOwnership[nodeId] == rank) {
+            EXPECT_FLOAT_EQ(expectedDist, distances[nodeId])
+                << "Node " << nodeId << " distance mismatch from source 5";
+        }
+    }
+}
+
+// Test 11: Source node 9 - verifies all distances from source 9
+// Expected distances from source 9:
+//   9=0.0, 5=0.9, 2=1.3, 6=2.0, 0=1.5, 1=2.0, 3=2.1, 4=2.8, 7=2.4, 8=3.4
+//   Paths: 9->5(0.9), 9->5->2(1.3), 9->5->2->6(2.0), 9->5->2->0(1.5)
+//          9->5->2->0->1(2.0), 9->5->2->0->1->3(2.1), 9->5->2->0->1->4(2.8)
+//          9->5->2->0->1->3->7(2.4), 9->5->2->0->1->4->8(3.4)
+TEST_F(DijkstraTest, DijkstraSource9AllDistances) {
+    std::string graphFile(TEST_GRAPH_PATH);
+    std::string partFile(TEST_PART_PATH);
+    
+    GraphData graph(rank, graphFile, partFile);
+    DistributedDijkstra dijkstra(9);
+    dijkstra.execute(graph);
+    
+    std::vector<float> distances = dijkstra.getDistances();
+    
+    // Expected distances from source 9
+    std::map<int, float> expected = {
+        {9, 0.0f}, {5, 0.9f}, {2, 1.3f}, {6, 2.0f}, {0, 1.5f},
+        {1, 2.0f}, {3, 2.1f}, {4, 2.8f}, {7, 2.4f}, {8, 3.4f}
+    };
+    
+    for (const auto &[nodeId, expectedDist] : expected) {
+        if (graph.m_nodeOwnership[nodeId] == rank) {
+            EXPECT_FLOAT_EQ(expectedDist, distances[nodeId])
+                << "Node " << nodeId << " distance mismatch from source 9";
+        }
+    }
+}
+
+/*
+ * Expected distances for simple_graph.json (4 nodes, complete bipartite):
+ * 
+ * Graph structure:
+ *   0 -- 1
+ *   |    |
+ *   2 -- 3
+ * 
+ * All edges have weight 1.0
+ * Partition: rank 0 owns nodes 0,1; rank 1 owns nodes 2,3
+ */
+
+// Test 12: Source node 0 on simple graph
+// Expected: 0=0.0, 1=1.0, 2=1.0, 3=2.0 (via either 1 or 2)
+TEST_F(DijkstraTest, DijkstraSimpleGraphSource0) {
+    std::string graphFile(SIMPLE_GRAPH_PATH);
+    std::string partFile(SIMPLE_PART_PATH);
+    
+    GraphData graph(rank, graphFile, partFile);
+    DistributedDijkstra dijkstra(0);
+    dijkstra.execute(graph);
+    
+    std::vector<float> distances = dijkstra.getDistances();
+    
+    // Expected distances from source 0
+    std::map<int, float> expected = {
+        {0, 0.0f}, {1, 1.0f}, {2, 1.0f}, {3, 2.0f}
+    };
+    
+    for (const auto &[nodeId, expectedDist] : expected) {
+        if (graph.m_nodeOwnership[nodeId] == rank) {
+            EXPECT_FLOAT_EQ(expectedDist, distances[nodeId])
+                << "Node " << nodeId << " distance mismatch from source 0";
+        }
+    }
+}
+
+// Test 13: Source node 3 on simple graph (node on rank 1)
+// Expected: 3=0.0, 1=1.0, 2=1.0, 0=2.0 (via either 1 or 2)
+TEST_F(DijkstraTest, DijkstraSimpleGraphSource3) {
+    std::string graphFile(SIMPLE_GRAPH_PATH);
+    std::string partFile(SIMPLE_PART_PATH);
+    
+    GraphData graph(rank, graphFile, partFile);
+    DistributedDijkstra dijkstra(3);
+    dijkstra.execute(graph);
+    
+    std::vector<float> distances = dijkstra.getDistances();
+    
+    // Expected distances from source 3
+    std::map<int, float> expected = {
+        {3, 0.0f}, {1, 1.0f}, {2, 1.0f}, {0, 2.0f}
+    };
+    
+    for (const auto &[nodeId, expectedDist] : expected) {
+        if (graph.m_nodeOwnership[nodeId] == rank) {
+            EXPECT_FLOAT_EQ(expectedDist, distances[nodeId])
+                << "Node " << nodeId << " distance mismatch from source 3";
+        }
+    }
+}
+
+/*
+ * Expected distances for chain_graph.json (5 nodes, linear chain):
+ * 
+ * Graph structure:
+ *   0 -- 1 -- 2 -- 3 -- 4
+ * 
+ * All edges have weight 1.0
+ * Partition: rank 0 owns nodes 0,1; rank 1 owns nodes 2,3,4
+ */
+
+// Test 14: Source node 0 on chain graph
+// Expected: 0=0.0, 1=1.0, 2=2.0, 3=3.0, 4=4.0
+TEST_F(DijkstraTest, DijkstraChainGraphSource0) {
+    std::string graphFile(CHAIN_GRAPH_PATH);
+    std::string partFile(CHAIN_PART_PATH);
+    
+    GraphData graph(rank, graphFile, partFile);
+    DistributedDijkstra dijkstra(0);
+    dijkstra.execute(graph);
+    
+    std::vector<float> distances = dijkstra.getDistances();
+    
+    // Expected distances from source 0
+    std::map<int, float> expected = {
+        {0, 0.0f}, {1, 1.0f}, {2, 2.0f}, {3, 3.0f}, {4, 4.0f}
+    };
+    
+    for (const auto &[nodeId, expectedDist] : expected) {
+        if (graph.m_nodeOwnership[nodeId] == rank) {
+            EXPECT_FLOAT_EQ(expectedDist, distances[nodeId])
+                << "Node " << nodeId << " distance mismatch from source 0";
+        }
+    }
+}
+
+// Test 15: Source node 2 on chain graph (node on rank 1)
+// Expected: 2=0.0, 1=1.0, 0=2.0, 3=1.0, 4=2.0
+TEST_F(DijkstraTest, DijkstraChainGraphSource2) {
+    std::string graphFile(CHAIN_GRAPH_PATH);
+    std::string partFile(CHAIN_PART_PATH);
+    
+    GraphData graph(rank, graphFile, partFile);
+    DistributedDijkstra dijkstra(2);
+    dijkstra.execute(graph);
+    
+    std::vector<float> distances = dijkstra.getDistances();
+    
+    // Expected distances from source 2
+    std::map<int, float> expected = {
+        {2, 0.0f}, {1, 1.0f}, {0, 2.0f}, {3, 1.0f}, {4, 2.0f}
+    };
+    
+    for (const auto &[nodeId, expectedDist] : expected) {
+        if (graph.m_nodeOwnership[nodeId] == rank) {
+            EXPECT_FLOAT_EQ(expectedDist, distances[nodeId])
+                << "Node " << nodeId << " distance mismatch from source 2";
         }
     }
 }
