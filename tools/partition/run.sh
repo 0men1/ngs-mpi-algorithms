@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#./tools/partition/run.sh outputs/graph.json --ranks 8 --out outputs/part.json
-
 Help()
 {
    # Display Help
@@ -18,10 +16,10 @@ Help()
 
 
 graph_json=outputs/graph.json
-ranks=8
+ranks=5
 output=outputs/part.json
 
-while getopts ":h:g:r:o" option; do
+while getopts ":h:g:r:o:" option; do
 	case $option in 
 		h) # help
 			Help
