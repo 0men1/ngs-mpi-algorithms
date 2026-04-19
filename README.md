@@ -245,18 +245,19 @@ Partitions graph nodes across MPI ranks using round-robin assignment.
 **Usage:**
 ```bash
 # Direct call (recommended)
-python tools/partition/partition.py <graph.json> <num_ranks> <output.json>
+.tools/partition/run.sh -g <graph.json> -r <num_ranks> -o <output.json>
 
 # Example
-python tools/partition/partition.py outputs/graph.json 4 outputs/part.json
+.tools/partition/run.sh -g outputs/graph.json -r 4 -o outputs/part.json
 ```
 
 **Arguments:**
-| Position | Description |
-|----------|-------------|
-| 1 | Input graph JSON file |
-| 2 | Number of MPI ranks |
-| 3 | Output partition JSON file |
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-g` | Path to exported graph.json | `outputs/graph.json` |
+| `-r` | Number of ranks | `5` |
+| `-o` | Output JSON file path | `outputs/part.json` |
+| `-h` | Show help | - |
 
 **Output:** JSON file mapping node ID to rank (e.g., `{"0": 0, "1": 0, "2": 1, ...}`).
 
@@ -337,39 +338,6 @@ Total Payload Bytes Sent: 240
 STATUS: SUCCESS
 Agreed Leader ID: 9
 =========================================================
-```
-
-### End-to-End Test Run
-
-This example demonstrates running the test suite to verify correctness:
-
-```bash
-# Navigate to project directory
-cd mpi_runtime
-
-# Clean and build (if necessary)
-rm -rf build
-cmake -B build
-cmake --build build
-
-# Run all tests
-make run_test
-```
-
-**Expected Output:**
-```
-[==========] Running 19 tests from 2 test suites.
-[----------] 15 tests from DijkstraTest
-[----------] 4 tests from GraphDataTest
-[==========] 19 tests from 2 test suites ran.
-[  PASSED  ] 19 tests.
-
-[==========] Running 10 tests from 1 test suite.
-[----------] 10 tests from LeaderElectionTest
-[==========] 10 tests from 1 test suite ran.
-[  PASSED  ] 10 tests.
-
-Total: 29/29 tests passed
 ```
 
 ### Running Experiments
