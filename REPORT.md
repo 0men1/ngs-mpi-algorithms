@@ -4,13 +4,10 @@
 1. [Executive Summary](#executive-summary)
 2. [Architectural Design](#architectural-design)
 3. [Algorithm Choices](#algorithm-choices)
-4. [Implementation Details](#implementation-details)
-5. [Data Formats](#data-formats)
-6. [Partition Model](#partition-model)
-7. [Assumptions for Correctness](#assumptions-for-correctness)
-8. [Experimental Design](#experimental-design)
-9. [Results and Analysis](#results-and-analysis)
-10. [Key Insights and Decisions](#key-insights-and-decisions)
+4. [Data Formats](#data-formats)
+5. [Assumptions for Correctness](#assumptions-for-correctness)
+6. [Experimental Design](#experimental-design)
+7. [Key Insights and Decisions](#key-insights-and-decisions)
 
 ---
 
@@ -223,35 +220,6 @@ struct ElectMsg {
 
 ---
 
-### Edge Storage Strategy
-
-To support distributed computation, each rank maintains two edge views:
-
-| Data Structure | Purpose | Edges Stored |
-|---------------|---------|--------------|
-| `m_adjList` | Outgoing edges for sending updates | Edges where rank owns SOURCE node |
-| `m_incomingEdges` | Incoming edges for processing updates | Edges where rank owns DESTINATION node |
-
-### Why Two Edge Views?
-
-Consider a graph edge from node A (rank 0) to node B (rank 1):
-
-```
-Rank 0: owns node A
-  - Must send updates about B when A is settled
-  - Stores edge in m_adjList[A]
-
-Rank 1: owns node B
-  - Must receive and process updates about B
-  - Stores edge in m_incomingEdges[B]
-```
-
-This design ensures each rank can:
-- Send updates for nodes it owns (via m_adjList)
-- Process updates received for nodes it owns (via m_incomingEdges)
-
----
-
 ## Assumptions for Correctness
 
 ### Dijkstra Algorithm Assumptions
@@ -372,22 +340,18 @@ This design ensures each rank can:
 1. **Separate Edge Storage for Send/Receive**
    - Decision: Maintain `m_adjList` (outgoing) and `m_incomingEdges` (incoming)
    - Rationale: Different ranks need different edge views based on send/receive roles
-   - Impact: Increased memory usage but clearer algorithm logic
 
 2. **Getter Methods for Testing**
    - Decision: Added `getDistances()`, `getFinalLeaders()`, `getNumMessagesSent()` etc.
    - Rationale: Enable white-box testing of internal algorithm state
-   - Trade-off: Breaks encapsulation but essential for verification
 
 3. **Partition File Format**
    - Decision: JSON-based partition specification
    - Rationale: Human-readable, easy to generate and modify
-   - Alternative considered: Binary format for efficiency (rejected for simplicity)
 
 4. **Command-line Interface**
    - Decision: Named arguments with `--` prefix (e.g., `--graph`, `--algo`)
    - Rationale: Self-documenting, order-independent argument parsing
-   - Implementation: Custom argument parser in `main.cpp`
 
 ---
 

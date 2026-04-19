@@ -1,7 +1,3 @@
-Should the graph export be able to reuse NGS graphs?
-
-
-
 # MPI Distributed Graph Algorithm Runtime
 
 A distributed MPI-based runtime for executing graph algorithms on partitioned graphs. Supports Distributed Dijkstra (shortest path) and Distributed Leader Election.
@@ -72,14 +68,6 @@ cd mpi_runtime
 cmake -B build
 cmake --build build
 ```
-
-### Build with Verbose Output
-
-```bash
-cmake -B build
-cmake --build build --verbose
-```
-
 ### Clean Rebuild
 
 ```bash
@@ -91,6 +79,37 @@ cmake --build build
 ---
 
 ## Running
+
+### Run the Main Application
+
+The main executable requires graph and partition files in JSON format. Run this from the `mpi_runtime/` directory:
+
+```bash
+cd mpi_runtime
+
+# Clean and build (if necessary)
+rm -rf build
+cmake -B build
+cmake --build build
+
+# Run Dijkstra algorithm
+mpirun -n 2 ./build/ngs_mpi --graph ../outputs/graph.json --part ../outputs/part.json --algo dijkstra --source 0
+
+# Run Leader Election algorithm
+mpirun -n 2 ./build/ngs_mpi --graph ../outputs/graph.json --part ../outputs/part.json --algo leader --rounds 30
+```
+
+**Command-line Options:**
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--graph`, `-g` | Path to graph JSON file | `../outputs/graph.json` |
+| `--part`, `-p` | Path to partition JSON file | `../outputs/part.json` |
+| `--algo`, `-a` | Algorithm to run (`dijkstra` or `leader`) | `dijkstra` |
+| `--source`, `-s` | Source node for Dijkstra | `0` |
+| `--rounds`, `-r` | Number of rounds for Leader Election | `200` |
+
+**Note:** Default paths are relative to the `mpi_runtime/` directory where the executable runs. Use absolute paths or adjust accordingly.
 
 ### Run All Tests
 
@@ -123,31 +142,6 @@ mpirun -n 2 ./build/run_test_dijkstra --gtest_filter=DijkstraTest.DijkstraSource
 mpirun -n 2 ./build/run_test_leaderelection --gtest_filter=LeaderElectionTest.*
 ```
 
-### Run the Main Application
-
-The main executable requires graph and partition files in JSON format. Run this from the `mpi_runtime/` directory:
-
-```bash
-cd mpi_runtime
-
-# Run Dijkstra algorithm
-mpirun -n 2 ./build/ngs_mpi --graph ../outputs/graph.json --part ../outputs/part.json --algo dijkstra --source 0
-
-# Run Leader Election algorithm
-mpirun -n 2 ./build/ngs_mpi --graph ../outputs/graph.json --part ../outputs/part.json --algo leader --rounds 30
-```
-
-**Command-line Options:**
-
-| Option | Description | Default |
-|--------|-------------|---------|
-| `--graph`, `-g` | Path to graph JSON file | `../outputs/graph.json` |
-| `--part`, `-p` | Path to partition JSON file | `../outputs/part.json` |
-| `--algo`, `-a` | Algorithm to run (`dijkstra` or `leader`) | `dijkstra` |
-| `--source`, `-s` | Source node for Dijkstra | `0` |
-| `--rounds`, `-r` | Number of rounds for Leader Election | `200` |
-
-**Note:** Default paths are relative to the `mpi_runtime/` directory where the executable runs. Use absolute paths or adjust accordingly.
 
 ---
 
@@ -210,39 +204,6 @@ CS453/                          # Project root
 
 ## Quick Example
 
-### End-to-End Test Run
-
-This example demonstrates running the test suite to verify correctness:
-
-```bash
-# Navigate to project directory
-cd mpi_runtime
-
-# Clean and build
-rm -rf build
-cmake -B build
-cmake --build build
-
-# Run all tests
-make run_test
-```
-
-**Expected Output:**
-```
-[==========] Running 19 tests from 2 test suites.
-[----------] 15 tests from DijkstraTest
-[----------] 4 tests from GraphDataTest
-[==========] 19 tests from 2 test suites ran.
-[  PASSED  ] 19 tests.
-
-[==========] Running 10 tests from 1 test suite.
-[----------] 10 tests from LeaderElectionTest
-[==========] 10 tests from 1 test suite ran.
-[  PASSED  ] 10 tests.
-
-Total: 29/29 tests passed
-```
-
 ### End-to-End Graph to Algorithm Run
 
 This example walks through the complete pipeline: generate a graph with NetGameSim, partition it, and run the algorithms.
@@ -255,33 +216,38 @@ Create a config file (e.g., `configs/example.conf`) or use the default:
 ./tools/graph_export/run.sh
 
 # Or use a custom config
-./tools/graph_export/run.sh -c configs/example.conf -o outputs/mygraph.json
+./tools/graph_export/run.sh -c configs/example.conf -o outputs/example_graph.json
 ```
 
 Generated files:
 - `outputs/raw_ngs_graph.ngs` - Raw NetGameSim output
-- `outputs/mygraph.json` - Enriched graph in JSON format (with weights)
+- `outputs/example_graph.json` - Enriched graph in JSON format (with weights)
 
 **Step 2: Partition the graph across MPI ranks**
 
 ```bash
 # Partition into 2 ranks
-python tools/partition/partition.py outputs/mygraph.json 2 outputs/mygraph_part.json
+./tools/partition/run.sh -o outputs/example_part.json -g outputs/example_graph.json -r 2
 ```
 
 Generated file:
-- `outputs/mygraph_part.json` - Node-to-rank mapping
+- `outputs/example_part.json` - Node-to-rank mapping
 
 **Step 3: Run the algorithms**
 
 ```bash
 cd mpi_runtime
 
+# Clean and build (if necessary)
+rm -rf build
+cmake -B build
+cmake --build build
+
 # Run Dijkstra (source node 0)
-mpirun -n 2 ./build/ngs_mpi --graph ../outputs/mygraph.json --part ../outputs/mygraph_part.json --algo dijkstra --source 0
+mpirun -n 2 ./build/ngs_mpi --graph ../outputs/example_graph.json --part ../outputs/example_part.json --algo dijkstra --source 0
 
 # Run Leader Election (10 rounds)
-mpirun -n 2 ./build/ngs_mpi --graph ../outputs/mygraph.json --part ../outputs/mygraph_part.json --algo leader --rounds 10
+mpirun -n 2 ./build/ngs_mpi --graph ../outputs/example_graph.json --part ../outputs/example_part.json --algo leader --rounds 10
 ```
 
 **Example Output (Dijkstra):**
@@ -313,32 +279,21 @@ Agreed Leader ID: 9
 =========================================================
 ```
 
-### Creating Custom Test Data
+### End-to-End Test Run
 
-1. Create a graph JSON file:
-```json
-{
-  "metadata": { "num_nodes": 3, "seed": 42 },
-  "adjacency_list": {
-    "0": [{ "v": 1, "w": 1.0 }, { "v": 2, "w": 2.0 }],
-    "1": [{ "v": 0, "w": 1.0 }, { "v": 2, "w": 1.0 }],
-    "2": [{ "v": 0, "w": 2.0 }, { "v": 1, "w": 1.0 }]
-  }
-}
-```
+This example demonstrates running the test suite to verify correctness:
 
-2. Create a partition JSON file:
-```json
-{
-  "0": 0,
-  "1": 0,
-  "2": 1
-}
-```
-
-3. Run with the partition:
 ```bash
-mpirun -n 2 ./build/ngs_mpi --graph my_graph.json --part my_partition.json --algo dijkstra --source 0
+# Navigate to project directory
+cd mpi_runtime
+
+# Clean and build (if necessary)
+rm -rf build
+cmake -B build
+cmake --build build
+
+# Run all tests
+make run_test
 ```
 
 **Expected Output:**
@@ -355,59 +310,6 @@ mpirun -n 2 ./build/ngs_mpi --graph my_graph.json --part my_partition.json --alg
 [  PASSED  ] 10 tests.
 
 Total: 29/29 tests passed
-```
-
-### Quick Algorithm Run
-
-Run the provided example graph (3 nodes, 2 ranks):
-
-```bash
-cd mpi_runtime
-
-# Run Dijkstra (source node 0)
-mpirun -n 2 ./build/ngs_mpi --graph ../outputs/example_graph.json --part ../outputs/example_part.json --algo dijkstra --source 0
-
-# Run Leader Election (5 rounds)
-mpirun -n 2 ./build/ngs_mpi --graph ../outputs/example_graph.json --part ../outputs/example_part.json --algo leader --rounds 5
-```
-
-**Expected Dijkstra Output:**
-```
-Node 0 | Distance: 0.000000
-Node 1 | Distance: 1.000000
-Node 2 | Distance: 2.000000
-```
-
-**Expected Leader Election Output:**
-```
-STATUS: SUCCESS
-Agreed Leader ID: 2
-```
-
-1. Create a graph JSON file:
-```json
-{
-  "metadata": { "num_nodes": 3, "seed": 42 },
-  "adjacency_list": {
-    "0": [{ "v": 1, "w": 1.0 }, { "v": 2, "w": 2.0 }],
-    "1": [{ "v": 0, "w": 1.0 }, { "v": 2, "w": 1.0 }],
-    "2": [{ "v": 0, "w": 2.0 }, { "v": 1, "w": 1.0 }]
-  }
-}
-```
-
-2. Create a partition JSON file:
-```json
-{
-  "0": 0,
-  "1": 0,
-  "2": 1
-}
-```
-
-3. Run with the partition:
-```bash
-mpirun -n 2 ./build/ngs_mpi --graph my_graph.json --part my_partition.json --algo dijkstra --source 0
 ```
 
 ### Running Experiments
