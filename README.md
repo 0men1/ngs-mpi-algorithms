@@ -8,7 +8,8 @@ A distributed MPI-based runtime for executing graph algorithms on partitioned gr
 3. [Building](#building)
 4. [Running](#running)
 5. [Project Structure](#project-structure)
-6. [Quick Example](#quick-example)
+6. [Tools](#tools)
+7. [Quick Example](#quick-example)
 
 ---
 
@@ -154,7 +155,8 @@ CS453/                          # Project root
 ├── student.txt                 # Student info
 ├── CMakeLists.txt              # Build configuration
 ├── configs/                    # NetGameSim configuration
-│   └── defconfig.conf          # Default config
+│   ├── defconfig.conf          # Default config (100 nodes)
+│   └── example.conf            # Example config (10 nodes)
 ├── mpi_runtime/                # MPI runtime implementation
 │   ├── CMakeLists.txt          # Build configuration
 │   ├── Makefile                # Convenience build targets
@@ -199,6 +201,64 @@ CS453/                          # Project root
 │       └── netmodelsim.jar     # Pre-built JAR
 └── outputs/                    # Generated output directory
 ```
+
+---
+
+## Tools
+
+### Graph Export (`tools/graph_export/`)
+
+Generates connected weighted graphs using NetGameSim and converts them to JSON.
+
+**Files:**
+- `run.sh` - Wrapper script that runs NetGameSim and calls enrichment.py
+- `enrichment.py` - Converts NGS format to JSON, adds edge weights, verifies connectivity
+
+**Usage:**
+```bash
+# Using default config (configs/defconfig.conf)
+./tools/graph_export/run.sh
+
+# Using custom config and output path
+./tools/graph_export/run.sh -c configs/myconfig.conf -o outputs/mygraph.json
+```
+
+**Arguments:**
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-c` | Path to NGS config file | `configs/defconfig.conf` |
+| `-o` | Output JSON file path | `outputs/graph.json` |
+| `-h` | Show help | - |
+
+**Output:** JSON file with `metadata` (num_nodes, seed) and `adjacency_list` (node -> edges with v and w fields).
+
+---
+
+### Partition (`tools/partition/`)
+
+Partitions graph nodes across MPI ranks using round-robin assignment.
+
+**Files:**
+- `run.sh` - Wrapper script (note: uses getopts, call python directly for simpler syntax)
+- `partition.py` - Reads graph JSON, assigns each node to a rank, outputs ownership map
+
+**Usage:**
+```bash
+# Direct call (recommended)
+python tools/partition/partition.py <graph.json> <num_ranks> <output.json>
+
+# Example
+python tools/partition/partition.py outputs/graph.json 4 outputs/part.json
+```
+
+**Arguments:**
+| Position | Description |
+|----------|-------------|
+| 1 | Input graph JSON file |
+| 2 | Number of MPI ranks |
+| 3 | Output partition JSON file |
+
+**Output:** JSON file mapping node ID to rank (e.g., `{"0": 0, "1": 0, "2": 1, ...}`).
 
 ---
 
