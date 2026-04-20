@@ -140,10 +140,11 @@ CS453/                          # Project root
 ├── README.md                   # This file
 ├── REPORT.md                   # Technical documentation
 ├── student.txt                 # Student info
-├── CMakeLists.txt              # Build configuration
 ├── build/                  # Build output directory
 ├── configs/                    # NetGameSim configuration
 │   ├── defconfig.conf          # Default config (100 nodes)
+│   ├── largeGraph.conf          # Large Graph config (1000 nodes)
+│   ├── largerGraph.conf          # Larger Graph config (5000 nodes)
 │   └── example.conf            # Example config (10 nodes)
 ├── mpi_runtime/                # MPI runtime implementation
 │   ├── CMakeLists.txt          # Build configuration
@@ -159,12 +160,6 @@ CS453/                          # Project root
 │   │   ├── test_dijkstra.cpp  # Dijkstra and GraphData tests (20 tests)
 │   │   ├── test_leaderelection.cpp  # Leader election tests (10 tests)
 │   │   └── test_graphs/       # Test data
-│   │       ├── testgraph1.json    # 10-node test graph
-│   │       ├── testpart1.json    # Partition file
-│   │       ├── simple_graph.json  # 4-node simple graph
-│   │       ├── simple_part.json   # Simple partition
-│   │       ├── chain_graph.json   # 5-node chain graph
-│   │       └── chain_part.json    # Chain partition
 ├── tools/                      # Utility scripts
 │   ├── graph_export/           # Graph generation tools
 │   │   ├── run.sh             # Generate graph from NetGameSim
@@ -177,12 +172,6 @@ CS453/                          # Project root
 │   ├── experiment2.sh         # 50 nodes / 2 ranks
 │   ├── experiment3.sh         # 200 nodes / 10 ranks
 │   └── graphs/                 # Pre-generated experiment graphs
-│       ├── exp1_100nodes.json
-│       ├── exp1_100nodes_part.json
-│       ├── exp2_50nodes.json
-│       ├── exp2_50nodes_part.json
-│       ├── exp3_200nodes.json
-│       └── exp3_200nodes_part.json
 ├── NetGameSim/                 # Graph generation library
 │   └── target/scala-3.2.2/
 │       └── netmodelsim.jar     # Pre-built JAR
@@ -238,7 +227,7 @@ Partitions graph nodes across MPI ranks using round-robin assignment.
 
 **Usage:**
 ```bash
-# Example: Partition graph "graph.json" into 4 ranks and into "part.json" file
+# Example: Partition graph "graph.json" into 4 ranks and output into "part.json" file
 ./tools/partition/run.sh -g outputs/graph.json -r 4 -o outputs/part.json
 ```
 
@@ -248,25 +237,7 @@ Partitions graph nodes across MPI ranks using round-robin assignment.
 
 ## Quick Example
 
-### Using the End-to-End Script (Recommended)
-
-The easiest way to run the complete pipeline is to use the provided script:
-
-```bash
-# Run the full pipeline (generates graph, partitions, builds, runs algorithms)
-./run_end_to_end.sh
-
-# Run step-by-step with explanations
-./run_end_to_end.sh --step-by-step
-
-# Use existing graph and partition files
-./run_end_to_end.sh --graph outputs/mygraph.json --part outputs/mypart.json
-
-# Customize parameters
-./run_end_to_end.sh --ranks 4 --source 0 --rounds 20 --seed 100
-```
-
-### Manual Step-by-Step
+### Step-by-Step
 
 This example walks through the complete pipeline: generate a graph with NetGameSim, partition it, and run the algorithms.
 
@@ -274,11 +245,11 @@ This example walks through the complete pipeline: generate a graph with NetGameS
 
 Create a config file (e.g., `configs/myconfig.conf`) or use the default `example.conf`:
 ```bash
-./tools/graph_export/run.sh -c configs/example.conf -o outputs/example_graph.json -s 50
+./tools/graph_export/run.sh -c configs/example.conf -o outputs/example_graph.json
 ```
 
 Generated files:
-- `outputs/raw_ngs_graph.ngs` - Raw NetGameSim output
+- `outputs/example_graph.ngs` - Raw NetGameSim output
 - `outputs/example_graph.json` - Enriched graph in JSON format (with weights)
 
 **Step 2: Partition the graph across MPI ranks**
