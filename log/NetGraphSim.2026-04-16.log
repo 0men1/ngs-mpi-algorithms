@@ -1,0 +1,424 @@
+05:59:12.708 [main] INFO  - Default output directory: /Users/homenhoma/dev_projects/class/CS453
+05:59:12.709 [main] INFO  - Using output directory: outputs
+05:59:12.709 [main] INFO  - Output graph file is outputs/test_graph.ngs and its perturbed counterpart is outputs/test_graph.ngs.perturbed
+05:59:12.709 [main] INFO  - The netgraphsim program is run at the host Homens-MacBook-Air.local with the following IP addresses:
+05:59:12.709 [main] INFO  - 127.0.0.1
+05:59:12.716 [main] INFO  - 10.0.0.165
+05:59:12.717 [main] INFO  - for the main entry
+05:59:12.717 [main] INFO  - key: NetModel.dissimulationCoefficient value: 0.15
+05:59:12.717 [main] INFO  - key: Graph.fileName value: NetGameSimNetGraph_29-10-23-00-22-06.ngs
+05:59:12.717 [main] INFO  - key: CostRewards.serviceRewardProbability value: 0.3
+05:59:12.717 [main] INFO  - key: NetModel.numberOfWalks value: 50
+05:59:12.717 [main] INFO  - key: CostRewards.serviceReward value: 10d
+05:59:12.717 [main] INFO  - key: NetModel.valuableDataProbability value: 0.001d
+05:59:12.717 [main] INFO  - key: NetModel.graphWalkNodeTerminationProbability value: 0.001d
+05:59:12.717 [main] INFO  - key: NetModel.maxProperties value: 20
+05:59:12.717 [main] INFO  - key: NetModel.maxWalkPathLengthCoeff value: 2
+05:59:12.717 [main] INFO  - key: NetModel.maxBranchingFactor value: 7
+05:59:12.717 [main] INFO  - key: Constants.All value: all
+05:59:12.717 [main] INFO  - key: CostRewards.targetAppLowPenalty value: 1
+05:59:12.717 [main] INFO  - key: Graph.outputPath value: ./converted
+05:59:12.718 [main] INFO  - key: NetModel.statesTotal value: 500
+05:59:12.718 [main] INFO  - key: CostRewards.targetAppHighPenalty value: 2
+05:59:12.718 [main] INFO  - key: CostRewards.costOfDetection value: 0.2d
+05:59:12.718 [main] INFO  - key: outputDirectory value: outputs
+05:59:12.718 [main] INFO  - key: seed value: 100
+05:59:12.718 [main] INFO  - key: NetModel.perturbationCoefficient value: 0.3
+05:59:12.718 [main] INFO  - key: NetModel.desiredReachabilityCoverage value: 1
+05:59:12.718 [main] INFO  - key: NetModel.distanceCoefficient value: 0.2
+05:59:12.718 [main] INFO  - key: NetModel.connectedness value: 2
+05:59:12.718 [main] INFO  - key: NetModel.actionRange value: 10
+05:59:12.718 [main] INFO  - key: CostRewards.malAppBudget value: 2700
+05:59:12.718 [main] INFO  - key: NetModel.edgeProbability value: 0.001
+05:59:12.718 [main] INFO  - key: NetModel.graphWalkTerminationPolicy value: maxpathlength
+05:59:12.718 [main] INFO  - key: Graph.directionality value: directed
+05:59:12.718 [main] INFO  - key: CostRewards.servicePenalty value: 3d
+05:59:12.718 [main] INFO  - key: Constants.UntilCycle value: untilcycle
+05:59:12.718 [main] INFO  - key: NetModel.maxDepth value: 5
+05:59:12.718 [main] INFO  - key: OutputGraphRepresentation.contentType value: json
+05:59:12.718 [main] INFO  - key: NetModel.propValueRange value: 100
+05:59:12.718 [main] INFO  - key: Constants.MaxPathLength value: maxpathlength
+05:59:12.718 [main] INFO  - key: NetModel.actionType value: 20
+05:59:12.718 [main] INFO  - key: NetModel.numberOfExperiments value: 100
+05:59:12.718 [main] INFO  - key: NetModel.distanceSpreadThreshold value: 0.05
+05:59:12.718 [main] INFO  - key: CostRewards.targetAppScore value: 5
+05:59:12.718 [main] INFO  - key: Graph.graphLocation value: ../../../
+05:59:12.718 [main] INFO  - for the NetModel entry
+05:59:12.718 [main] INFO  - key: numberOfExperiments value: 100
+05:59:12.718 [main] INFO  - key: actionType value: 20
+05:59:12.718 [main] INFO  - key: maxWalkPathLengthCoeff value: 2
+05:59:12.718 [main] INFO  - key: perturbationCoefficient value: 0.3
+05:59:12.718 [main] INFO  - key: distanceCoefficient value: 0.2
+05:59:12.718 [main] INFO  - key: valuableDataProbability value: 0.001d
+05:59:12.718 [main] INFO  - key: numberOfWalks value: 50
+05:59:12.718 [main] INFO  - key: graphWalkNodeTerminationProbability value: 0.001d
+05:59:12.718 [main] INFO  - key: actionRange value: 10
+05:59:12.718 [main] INFO  - key: maxProperties value: 20
+05:59:12.718 [main] INFO  - key: desiredReachabilityCoverage value: 1
+05:59:12.718 [main] INFO  - key: maxBranchingFactor value: 7
+05:59:12.718 [main] INFO  - key: dissimulationCoefficient value: 0.15
+05:59:12.718 [main] INFO  - key: maxDepth value: 5
+05:59:12.718 [main] INFO  - key: statesTotal value: 500
+05:59:12.718 [main] INFO  - key: edgeProbability value: 0.001
+05:59:12.718 [main] INFO  - key: graphWalkTerminationPolicy value: maxpathlength
+05:59:12.718 [main] INFO  - key: distanceSpreadThreshold value: 0.05
+05:59:12.718 [main] INFO  - key: connectedness value: 2
+05:59:12.718 [main] INFO  - key: propValueRange value: 100
+05:59:12.732 [main] INFO  - Generating a random graph with 500 nodes and ensuring 100.0% reachability
+05:59:12.766 [scala-execution-context-global-30] INFO  - Random value generator created with the seed Some(100)
+05:59:12.850 [main] INFO  - Inserting 500 created nodes into the graph
+05:59:12.852 [main] INFO  - Created 500 nodes
+05:59:13.072 [main] INFO  - Ready to generate 248 edge candidates
+05:59:13.080 [main] INFO  - Generated 248 edge candidates out of 250000 possible combinations
+05:59:13.082 [main] INFO  - Generated graph with 500 nodes and 236 edges
+05:59:13.089 [main] INFO  - Added edge from the init node to 226
+05:59:13.089 [main] INFO  - Added edge from the init node to 217
+05:59:13.089 [main] INFO  - Linked the init node to 2 nodes
+05:59:13.091 [main] INFO  - Added init state connected with 2 nodes
+05:59:13.096 [main] INFO  - DFS: reachable 15 nodes with 0 loops in the graph
+05:59:13.099 [main] INFO  - The reachability ratio is 3.00 or there are 15 reachable nodes out of total 500 nodes in the graph
+05:59:13.102 [main] INFO  - Force reachability: there are 485 orphan nodes in the graph
+05:59:13.230 [main] INFO  - DFS: reachable 16 nodes with 0 loops in the graph
+05:59:13.231 [main] INFO  - The reachability ratio is 3.20 or there are 16 reachable nodes out of total 500 nodes in the graph
+05:59:13.231 [main] INFO  - Force reachability: there are 484 orphan nodes in the graph
+05:59:13.350 [main] INFO  - DFS: reachable 267 nodes with 24 loops in the graph
+05:59:13.350 [main] INFO  - The reachability ratio is 53.40 or there are 267 reachable nodes out of total 500 nodes in the graph
+05:59:13.350 [main] INFO  - Force reachability: there are 233 orphan nodes in the graph
+05:59:13.379 [main] INFO  - DFS: reachable 268 nodes with 24 loops in the graph
+05:59:13.380 [main] INFO  - The reachability ratio is 53.60 or there are 268 reachable nodes out of total 500 nodes in the graph
+05:59:13.380 [main] INFO  - Force reachability: there are 232 orphan nodes in the graph
+05:59:13.405 [main] INFO  - DFS: reachable 294 nodes with 22 loops in the graph
+05:59:13.405 [main] INFO  - The reachability ratio is 58.80 or there are 294 reachable nodes out of total 500 nodes in the graph
+05:59:13.406 [main] INFO  - Force reachability: there are 206 orphan nodes in the graph
+05:59:13.425 [main] INFO  - DFS: reachable 310 nodes with 24 loops in the graph
+05:59:13.425 [main] INFO  - The reachability ratio is 62.00 or there are 310 reachable nodes out of total 500 nodes in the graph
+05:59:13.426 [main] INFO  - Force reachability: there are 190 orphan nodes in the graph
+05:59:13.442 [main] INFO  - DFS: reachable 311 nodes with 24 loops in the graph
+05:59:13.442 [main] INFO  - The reachability ratio is 62.20 or there are 311 reachable nodes out of total 500 nodes in the graph
+05:59:13.443 [main] INFO  - Force reachability: there are 189 orphan nodes in the graph
+05:59:13.461 [main] INFO  - DFS: reachable 330 nodes with 26 loops in the graph
+05:59:13.462 [main] INFO  - The reachability ratio is 66.00 or there are 330 reachable nodes out of total 500 nodes in the graph
+05:59:13.462 [main] INFO  - Force reachability: there are 170 orphan nodes in the graph
+05:59:13.473 [main] INFO  - DFS: reachable 449 nodes with 64 loops in the graph
+05:59:13.473 [main] INFO  - The reachability ratio is 89.80 or there are 449 reachable nodes out of total 500 nodes in the graph
+05:59:13.473 [main] INFO  - Force reachability: there are 51 orphan nodes in the graph
+05:59:13.476 [main] INFO  - DFS: reachable 450 nodes with 64 loops in the graph
+05:59:13.476 [main] INFO  - The reachability ratio is 90.00 or there are 450 reachable nodes out of total 500 nodes in the graph
+05:59:13.476 [main] INFO  - Force reachability: there are 50 orphan nodes in the graph
+05:59:13.478 [main] INFO  - DFS: reachable 451 nodes with 102 loops in the graph
+05:59:13.478 [main] INFO  - The reachability ratio is 90.20 or there are 451 reachable nodes out of total 500 nodes in the graph
+05:59:13.478 [main] INFO  - Force reachability: there are 49 orphan nodes in the graph
+05:59:13.481 [main] INFO  - DFS: reachable 465 nodes with 114 loops in the graph
+05:59:13.481 [main] INFO  - The reachability ratio is 93.00 or there are 465 reachable nodes out of total 500 nodes in the graph
+05:59:13.481 [main] INFO  - Force reachability: there are 35 orphan nodes in the graph
+05:59:13.483 [main] INFO  - DFS: reachable 467 nodes with 124 loops in the graph
+05:59:13.483 [main] INFO  - The reachability ratio is 93.40 or there are 467 reachable nodes out of total 500 nodes in the graph
+05:59:13.483 [main] INFO  - Force reachability: there are 33 orphan nodes in the graph
+05:59:13.485 [main] INFO  - DFS: reachable 468 nodes with 124 loops in the graph
+05:59:13.485 [main] INFO  - The reachability ratio is 93.60 or there are 468 reachable nodes out of total 500 nodes in the graph
+05:59:13.485 [main] INFO  - Force reachability: there are 32 orphan nodes in the graph
+05:59:13.487 [main] INFO  - DFS: reachable 472 nodes with 138 loops in the graph
+05:59:13.487 [main] INFO  - The reachability ratio is 94.40 or there are 472 reachable nodes out of total 500 nodes in the graph
+05:59:13.487 [main] INFO  - Force reachability: there are 28 orphan nodes in the graph
+05:59:13.489 [main] INFO  - DFS: reachable 473 nodes with 154 loops in the graph
+05:59:13.489 [main] INFO  - The reachability ratio is 94.60 or there are 473 reachable nodes out of total 500 nodes in the graph
+05:59:13.489 [main] INFO  - Force reachability: there are 27 orphan nodes in the graph
+05:59:13.491 [main] INFO  - DFS: reachable 474 nodes with 154 loops in the graph
+05:59:13.491 [main] INFO  - The reachability ratio is 94.80 or there are 474 reachable nodes out of total 500 nodes in the graph
+05:59:13.491 [main] INFO  - Force reachability: there are 26 orphan nodes in the graph
+05:59:13.492 [main] INFO  - DFS: reachable 478 nodes with 122 loops in the graph
+05:59:13.493 [main] INFO  - The reachability ratio is 95.60 or there are 478 reachable nodes out of total 500 nodes in the graph
+05:59:13.493 [main] INFO  - Force reachability: there are 22 orphan nodes in the graph
+05:59:13.494 [main] INFO  - DFS: reachable 482 nodes with 150 loops in the graph
+05:59:13.494 [main] INFO  - The reachability ratio is 96.40 or there are 482 reachable nodes out of total 500 nodes in the graph
+05:59:13.494 [main] INFO  - Force reachability: there are 18 orphan nodes in the graph
+05:59:13.496 [main] INFO  - DFS: reachable 485 nodes with 150 loops in the graph
+05:59:13.496 [main] INFO  - The reachability ratio is 97.00 or there are 485 reachable nodes out of total 500 nodes in the graph
+05:59:13.496 [main] INFO  - Force reachability: there are 15 orphan nodes in the graph
+05:59:13.498 [main] INFO  - DFS: reachable 486 nodes with 152 loops in the graph
+05:59:13.498 [main] INFO  - The reachability ratio is 97.20 or there are 486 reachable nodes out of total 500 nodes in the graph
+05:59:13.498 [main] INFO  - Force reachability: there are 14 orphan nodes in the graph
+05:59:13.500 [main] INFO  - DFS: reachable 489 nodes with 182 loops in the graph
+05:59:13.500 [main] INFO  - The reachability ratio is 97.80 or there are 489 reachable nodes out of total 500 nodes in the graph
+05:59:13.500 [main] INFO  - Force reachability: there are 11 orphan nodes in the graph
+05:59:13.502 [main] INFO  - DFS: reachable 490 nodes with 198 loops in the graph
+05:59:13.502 [main] INFO  - The reachability ratio is 98.00 or there are 490 reachable nodes out of total 500 nodes in the graph
+05:59:13.503 [main] INFO  - Force reachability: there are 10 orphan nodes in the graph
+05:59:13.504 [main] INFO  - DFS: reachable 494 nodes with 196 loops in the graph
+05:59:13.504 [main] INFO  - The reachability ratio is 98.80 or there are 494 reachable nodes out of total 500 nodes in the graph
+05:59:13.504 [main] INFO  - Force reachability: there are 6 orphan nodes in the graph
+05:59:13.506 [main] INFO  - DFS: reachable 495 nodes with 196 loops in the graph
+05:59:13.506 [main] INFO  - The reachability ratio is 99.00 or there are 495 reachable nodes out of total 500 nodes in the graph
+05:59:13.506 [main] INFO  - Force reachability: there are 5 orphan nodes in the graph
+05:59:13.508 [main] INFO  - DFS: reachable 496 nodes with 206 loops in the graph
+05:59:13.508 [main] INFO  - The reachability ratio is 99.20 or there are 496 reachable nodes out of total 500 nodes in the graph
+05:59:13.508 [main] INFO  - Force reachability: there are 4 orphan nodes in the graph
+05:59:13.509 [main] INFO  - DFS: reachable 497 nodes with 206 loops in the graph
+05:59:13.510 [main] INFO  - The reachability ratio is 99.40 or there are 497 reachable nodes out of total 500 nodes in the graph
+05:59:13.510 [main] INFO  - Force reachability: there are 3 orphan nodes in the graph
+05:59:13.511 [main] INFO  - DFS: reachable 500 nodes with 208 loops in the graph
+05:59:13.511 [main] INFO  - The reachability ratio is 100.00 or there are 500 reachable nodes out of total 500 nodes in the graph
+05:59:13.511 [main] INFO  - Force reachability: there are 0 orphan nodes in the graph
+05:59:13.512 [main] INFO  - The original graph contains 501 nodes and 991 edges; the configuration parameter specified 500 nodes.
+05:59:13.578 [main] INFO  - Successfully persisted the graph in json to outputs/test_graph.ngs
+05:59:13.578 [main] INFO  - Generating DOT file for graph with 501 nodes for visualization as outputs/test_graph.ngs.dot
+05:59:13.671 [main] INFO  - Successfully rendered the graph to outputs/test_graph.ngs.dot
+05:59:13.671 [main] INFO  - A graph image file can be generated using the following command: sfdp -x -Goverlap=scale -Tpng outputs/test_graph.ngs.dot > outputs/test_graph.ngs.png
+05:59:13.671 [main] INFO  - Perturbing the original graph to create its modified counterpart...
+05:59:13.686 [main] INFO  - Out of the 486 nodes, perturbations will be applied to 145 nodes
+05:59:13.687 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(374,1,14,1,77,3,0,6,0.5203659691497734,false)
+05:59:13.688 [main] INFO  - Modified an edge: 
+05:59:13.688 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(493,4,17,1,84,4,4,1,0.9389489557746066,false)
+05:59:13.689 [main] INFO  - Removed an edge from NodeObject(493,4,17,1,84,4,4,1,0.9389489557746066,false) to NodeObject(198,1,7,1,20,4,4,13,0.3241291912488672,false) successfully
+05:59:13.689 [main] INFO  - Added edge Action(2,NodeObject(493,4,17,1,84,4,4,1,0.9389489557746066,false),NodeObject(198,1,7,1,20,4,4,13,0.3241291912488672,false),7,17,Some(48),0.13389597732167668) from NodeObject(493,4,17,1,84,4,4,1,0.9389489557746066,false) to NodeObject(198,1,7,1,20,4,4,13,0.3241291912488672,false) successfully
+05:59:13.689 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(493,4,17,1,84,4,4,1,0.9389489557746066,false)),EdgeModified(Action(15,NodeObject(493,4,17,1,84,4,4,1,0.9389489557746066,false),NodeObject(198,1,7,1,20,4,4,13,0.3241291912488672,false),8,23,None,0.07480677085261389)))(OriginalNetComponent(NodeObject(493,4,17,1,84,4,4,1,0.9389489557746066,false)),EdgeRemoved(Action(6,NodeObject(493,4,17,1,84,4,4,1,0.9389489557746066,false),NodeObject(198,1,7,1,20,4,4,13,0.3241291912488672,false),8,23,None,0.28723704250262394)))(OriginalNetComponent(NodeObject(493,4,17,1,84,4,4,1,0.9389489557746066,false)),EdgeAdded(Action(2,NodeObject(493,4,17,1,84,4,4,1,0.9389489557746066,false),NodeObject(198,1,7,1,20,4,4,13,0.3241291912488672,false),7,17,Some(48),0.13389597732167668)))
+05:59:13.689 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(357,2,12,1,85,4,0,6,0.6499779643433395,false)
+05:59:13.689 [main] INFO  - Modified an edge: 
+05:59:13.689 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(428,4,6,1,20,1,5,5,0.8329145087576473,false)
+05:59:13.689 [main] INFO  - Added edge Action(19,NodeObject(428,4,6,1,20,1,5,5,0.8329145087576473,false),NodeObject(190,1,5,1,76,3,2,17,0.4128554204874594,false),24,0,Some(52),0.058531514121053396) from NodeObject(428,4,6,1,20,1,5,5,0.8329145087576473,false) to NodeObject(190,1,5,1,76,3,2,17,0.4128554204874594,false) successfully
+05:59:13.689 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(428,4,6,1,20,1,5,5,0.8329145087576473,false)),EdgeAdded(Action(19,NodeObject(428,4,6,1,20,1,5,5,0.8329145087576473,false),NodeObject(190,1,5,1,76,3,2,17,0.4128554204874594,false),24,0,Some(52),0.058531514121053396)))
+05:59:13.690 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(169,0,15,1,67,1,6,11,0.8055034843214429,false)
+05:59:13.690 [main] INFO  - Modified an edge: 
+05:59:13.690 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(63,4,9,1,82,3,5,18,0.008316083115131434,false)
+05:59:13.690 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(482,4,13,1,59,0,2,3,0.9591902136472819,false)
+05:59:13.690 [main] INFO  - Removed an edge from NodeObject(482,4,13,1,59,0,2,3,0.9591902136472819,false) to NodeObject(40,2,10,1,76,2,4,2,0.9970646412296706,false) successfully
+05:59:13.690 [main] INFO  - Added edge Action(19,NodeObject(482,4,13,1,59,0,2,3,0.9591902136472819,false),NodeObject(40,2,10,1,76,2,4,2,0.9970646412296706,false),0,15,None,0.6233380543720535) from NodeObject(482,4,13,1,59,0,2,3,0.9591902136472819,false) to NodeObject(40,2,10,1,76,2,4,2,0.9970646412296706,false) successfully
+05:59:13.690 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(482,4,13,1,59,0,2,3,0.9591902136472819,false)),EdgeModified(Action(5,NodeObject(482,4,13,1,59,0,2,3,0.9591902136472819,false),NodeObject(40,2,10,1,76,2,4,2,0.9970646412296706,false),1,28,Some(38),0.5821693944899441)))(OriginalNetComponent(NodeObject(482,4,13,1,59,0,2,3,0.9591902136472819,false)),EdgeRemoved(Action(1,NodeObject(482,4,13,1,59,0,2,3,0.9591902136472819,false),NodeObject(40,2,10,1,76,2,4,2,0.9970646412296706,false),1,28,Some(38),0.16849889226833537)))(OriginalNetComponent(NodeObject(482,4,13,1,59,0,2,3,0.9591902136472819,false)),EdgeAdded(Action(19,NodeObject(482,4,13,1,59,0,2,3,0.9591902136472819,false),NodeObject(40,2,10,1,76,2,4,2,0.9970646412296706,false),0,15,None,0.6233380543720535)))
+05:59:13.690 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(385,3,6,1,11,2,5,10,0.4219538548772569,false)
+05:59:13.691 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(396,0,19,1,18,0,2,19,0.4125186259941894,false)
+05:59:13.691 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(437,3,7,1,53,3,2,2,0.16014977997781532,false)
+05:59:13.692 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(330,4,1,1,11,4,0,14,0.3032655995958864,false)
+05:59:13.694 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(86,3,4,1,84,2,1,5,0.17070178488143828,false)
+05:59:13.694 [main] INFO  - Modified an edge: 
+05:59:13.694 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(415,1,8,1,0,2,6,8,0.373252131016897,false)
+05:59:13.694 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(262,6,0,1,4,4,5,17,0.4237388986647811,false)
+05:59:13.694 [main] INFO  - Added edge Action(0,NodeObject(262,6,0,1,4,4,5,17,0.4237388986647811,false),NodeObject(165,5,13,1,82,0,6,0,0.7771724808150933,false),41,2,Some(90),0.5348614700088912) from NodeObject(262,6,0,1,4,4,5,17,0.4237388986647811,false) to NodeObject(165,5,13,1,82,0,6,0,0.7771724808150933,false) successfully
+05:59:13.694 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(262,6,0,1,4,4,5,17,0.4237388986647811,false)),EdgeAdded(Action(0,NodeObject(262,6,0,1,4,4,5,17,0.4237388986647811,false),NodeObject(165,5,13,1,82,0,6,0,0.7771724808150933,false),41,2,Some(90),0.5348614700088912)))
+05:59:13.694 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(105,0,15,1,11,1,2,14,0.36313642673861,false)
+05:59:13.694 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(84,6,7,1,10,2,6,11,0.040440816862374884,false)
+05:59:13.695 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(171,6,10,1,53,2,5,16,0.3835629097537583,false)
+05:59:13.695 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(103,3,8,1,82,2,5,0,0.8215180208024179,false)
+05:59:13.695 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(334,2,10,1,81,1,3,2,0.5224205826523975,false)
+05:59:13.695 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(87,6,19,1,99,3,2,18,0.7411010533730281,false)
+05:59:13.696 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(55,6,17,1,91,2,6,7,0.22890237030524252,false)
+05:59:13.696 [main] INFO  - Modified an edge: 
+05:59:13.696 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(135,5,5,1,60,3,3,8,0.20883907963206294,false)
+05:59:13.696 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(339,3,4,1,78,2,3,8,0.8948397983810769,false)
+05:59:13.696 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(314,4,14,1,96,0,0,10,0.6773366726487308,false)
+05:59:13.698 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(137,1,15,1,75,4,1,7,0.8616335786461629,false)
+05:59:13.698 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(37,3,19,1,29,2,1,14,0.5497250694776525,false)
+05:59:13.699 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(143,0,13,1,20,1,5,2,0.9211886829082906,false)
+05:59:13.699 [main] INFO  - Modified an edge: 
+05:59:13.699 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(490,3,18,1,67,4,1,7,0.8036923130205721,false)
+05:59:13.699 [main] INFO  - Removed an edge from NodeObject(490,3,18,1,67,4,1,7,0.8036923130205721,false) to NodeObject(311,3,5,1,59,1,6,12,0.41368982144746336,false) successfully
+05:59:13.699 [main] INFO  - Added edge Action(9,NodeObject(490,3,18,1,67,4,1,7,0.8036923130205721,false),NodeObject(311,3,5,1,59,1,6,12,0.41368982144746336,false),1,24,None,0.135869273213719) from NodeObject(490,3,18,1,67,4,1,7,0.8036923130205721,false) to NodeObject(311,3,5,1,59,1,6,12,0.41368982144746336,false) successfully
+05:59:13.699 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(490,3,18,1,67,4,1,7,0.8036923130205721,false)),EdgeModified(Action(15,NodeObject(490,3,18,1,67,4,1,7,0.8036923130205721,false),NodeObject(311,3,5,1,59,1,6,12,0.41368982144746336,false),31,27,None,0.4963770764083302)))(OriginalNetComponent(NodeObject(490,3,18,1,67,4,1,7,0.8036923130205721,false)),EdgeRemoved(Action(2,NodeObject(490,3,18,1,67,4,1,7,0.8036923130205721,false),NodeObject(311,3,5,1,59,1,6,12,0.41368982144746336,false),31,27,None,0.3985736946487024)))(OriginalNetComponent(NodeObject(490,3,18,1,67,4,1,7,0.8036923130205721,false)),EdgeAdded(Action(9,NodeObject(490,3,18,1,67,4,1,7,0.8036923130205721,false),NodeObject(311,3,5,1,59,1,6,12,0.41368982144746336,false),1,24,None,0.135869273213719)))
+05:59:13.699 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(381,6,19,1,3,1,3,11,0.02285584272782004,false)
+05:59:13.699 [main] INFO  - Added edge Action(11,NodeObject(381,6,19,1,3,1,3,11,0.02285584272782004,false),NodeObject(273,3,13,1,60,2,6,10,0.3714519372825198,false),54,3,None,0.2540779998933881) from NodeObject(381,6,19,1,3,1,3,11,0.02285584272782004,false) to NodeObject(273,3,13,1,60,2,6,10,0.3714519372825198,false) successfully
+05:59:13.699 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(381,6,19,1,3,1,3,11,0.02285584272782004,false)),EdgeAdded(Action(11,NodeObject(381,6,19,1,3,1,3,11,0.02285584272782004,false),NodeObject(273,3,13,1,60,2,6,10,0.3714519372825198,false),54,3,None,0.2540779998933881)))
+05:59:13.699 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(27,4,19,1,68,3,3,7,0.058061900795712496,false)
+05:59:13.700 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(315,0,4,1,58,1,4,16,0.3572633985067172,false)
+05:59:13.700 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(363,6,15,1,10,2,4,18,0.350810648613451,false)
+05:59:13.700 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(435,5,9,1,87,0,4,15,0.08233957981539464,false)
+05:59:13.700 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(500,2,8,1,7,2,2,18,0.7687873456647975,false)
+05:59:13.700 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(404,5,16,1,64,1,5,2,0.33093223425409357,false)
+05:59:13.701 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(58,5,14,1,35,3,4,17,0.6495973864716681,false)
+05:59:13.701 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(292,6,9,1,27,0,4,19,0.1560481623119867,false)
+05:59:13.701 [main] INFO  - Modified an edge: 
+05:59:13.701 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(498,2,17,1,3,1,6,1,0.5967123060195936,false)
+05:59:13.702 [main] INFO  - Removed an edge from NodeObject(498,2,17,1,3,1,6,1,0.5967123060195936,false) to NodeObject(118,5,14,1,76,4,2,13,0.4431600306917358,false) successfully
+05:59:13.702 [main] INFO  - Added edge Action(4,NodeObject(498,2,17,1,3,1,6,1,0.5967123060195936,false),NodeObject(118,5,14,1,76,4,2,13,0.4431600306917358,false),5,67,Some(26),0.13801774783653564) from NodeObject(498,2,17,1,3,1,6,1,0.5967123060195936,false) to NodeObject(118,5,14,1,76,4,2,13,0.4431600306917358,false) successfully
+05:59:13.702 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(498,2,17,1,3,1,6,1,0.5967123060195936,false)),EdgeModified(Action(3,NodeObject(498,2,17,1,3,1,6,1,0.5967123060195936,false),NodeObject(118,5,14,1,76,4,2,13,0.4431600306917358,false),26,43,None,0.2074046869373244)))(OriginalNetComponent(NodeObject(498,2,17,1,3,1,6,1,0.5967123060195936,false)),EdgeRemoved(Action(1,NodeObject(498,2,17,1,3,1,6,1,0.5967123060195936,false),NodeObject(118,5,14,1,76,4,2,13,0.4431600306917358,false),26,43,None,0.32093418121171624)))(OriginalNetComponent(NodeObject(498,2,17,1,3,1,6,1,0.5967123060195936,false)),EdgeAdded(Action(4,NodeObject(498,2,17,1,3,1,6,1,0.5967123060195936,false),NodeObject(118,5,14,1,76,4,2,13,0.4431600306917358,false),5,67,Some(26),0.13801774783653564)))
+05:59:13.702 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(289,4,4,1,98,0,2,17,0.5185675996302211,false)
+05:59:13.703 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(311,3,5,1,59,1,6,12,0.41368982144746336,false)
+05:59:13.703 [main] INFO  - Modified an edge: 
+05:59:13.703 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(56,5,3,1,49,1,1,4,0.853992871476775,false)
+05:59:13.704 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(19,4,5,1,86,0,3,2,0.6279881809431195,false)
+05:59:13.704 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(71,5,9,1,57,0,1,4,0.8167210658370864,false)
+05:59:13.704 [main] INFO  - Added edge Action(17,NodeObject(71,5,9,1,57,0,1,4,0.8167210658370864,false),NodeObject(51,6,11,1,73,2,2,14,0.9383644308734332,false),0,30,None,0.14955417548828542) from NodeObject(71,5,9,1,57,0,1,4,0.8167210658370864,false) to NodeObject(51,6,11,1,73,2,2,14,0.9383644308734332,false) successfully
+05:59:13.704 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(71,5,9,1,57,0,1,4,0.8167210658370864,false)),EdgeAdded(Action(17,NodeObject(71,5,9,1,57,0,1,4,0.8167210658370864,false),NodeObject(51,6,11,1,73,2,2,14,0.9383644308734332,false),0,30,None,0.14955417548828542)))
+05:59:13.704 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(466,5,3,1,0,3,5,11,0.8607220978133975,false)
+05:59:13.704 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(120,2,14,1,1,3,3,8,0.3932028848485549,false)
+05:59:13.705 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(300,2,15,1,21,2,0,3,0.8829290559864634,false)
+05:59:13.705 [main] INFO  - Modified an edge: 
+05:59:13.705 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(470,2,12,1,4,2,3,0,0.7624220960869265,false)
+05:59:13.705 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(427,6,5,1,3,4,0,0,0.7930320734912154,false)
+05:59:13.706 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(387,1,7,1,73,0,6,6,0.1482483287680353,false)
+05:59:13.706 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(151,4,10,1,35,3,3,17,0.23972864510789949,false)
+05:59:13.706 [main] INFO  - Modified an edge: 
+05:59:13.706 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(141,4,19,1,62,4,5,18,0.20145678094020314,false)
+05:59:13.706 [main] INFO  - Removed an edge from NodeObject(141,4,19,1,62,4,5,18,0.20145678094020314,false) to NodeObject(299,1,15,1,27,4,5,4,0.6936542947878953,false) successfully
+05:59:13.706 [main] INFO  - Added edge Action(11,NodeObject(141,4,19,1,62,4,5,18,0.20145678094020314,false),NodeObject(299,1,15,1,27,4,5,4,0.6936542947878953,false),9,7,None,0.29167622329756204) from NodeObject(141,4,19,1,62,4,5,18,0.20145678094020314,false) to NodeObject(299,1,15,1,27,4,5,4,0.6936542947878953,false) successfully
+05:59:13.706 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(141,4,19,1,62,4,5,18,0.20145678094020314,false)),EdgeModified(Action(13,NodeObject(141,4,19,1,62,4,5,18,0.20145678094020314,false),NodeObject(299,1,15,1,27,4,5,4,0.6936542947878953,false),29,19,Some(7),0.7749631203137596)))(OriginalNetComponent(NodeObject(141,4,19,1,62,4,5,18,0.20145678094020314,false)),EdgeRemoved(Action(9,NodeObject(141,4,19,1,62,4,5,18,0.20145678094020314,false),NodeObject(299,1,15,1,27,4,5,4,0.6936542947878953,false),29,19,Some(7),0.33587578175252997)))(OriginalNetComponent(NodeObject(141,4,19,1,62,4,5,18,0.20145678094020314,false)),EdgeAdded(Action(11,NodeObject(141,4,19,1,62,4,5,18,0.20145678094020314,false),NodeObject(299,1,15,1,27,4,5,4,0.6936542947878953,false),9,7,None,0.29167622329756204)))
+05:59:13.706 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(238,5,13,1,16,4,0,1,0.14055190879619173,false)
+05:59:13.706 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(90,0,16,1,65,0,6,18,0.4049850957932102,false)
+05:59:13.707 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(481,4,19,1,3,0,5,12,0.6739899272762024,false)
+05:59:13.707 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(426,2,18,1,94,4,4,2,0.2697442385827955,false)
+05:59:13.707 [main] INFO  - Modified an edge: 
+05:59:13.707 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(40,2,10,1,76,2,4,2,0.9970646412296706,false)
+05:59:13.707 [main] INFO  - Modified an edge: 
+05:59:13.707 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(2,2,16,1,15,2,4,8,0.7883130205155932,false)
+05:59:13.707 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(155,3,7,1,16,4,3,7,0.4310801543159297,false)
+05:59:13.707 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(253,3,3,1,87,1,4,10,0.6553207841149529,false)
+05:59:13.708 [main] INFO  - Modified an edge: 
+05:59:13.708 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(380,1,5,1,20,3,3,15,0.7475956008323762,false)
+05:59:13.708 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(430,0,3,1,22,1,6,15,0.48375709820327584,false)
+05:59:13.708 [main] INFO  - Added edge Action(17,NodeObject(430,0,3,1,22,1,6,15,0.48375709820327584,false),NodeObject(426,2,18,1,94,4,4,2,0.2697442385827955,false),0,4,None,0.8925364632892262) from NodeObject(430,0,3,1,22,1,6,15,0.48375709820327584,false) to NodeObject(426,2,18,1,94,4,4,2,0.2697442385827955,false) successfully
+05:59:13.708 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(430,0,3,1,22,1,6,15,0.48375709820327584,false)),EdgeAdded(Action(17,NodeObject(430,0,3,1,22,1,6,15,0.48375709820327584,false),NodeObject(426,2,18,1,94,4,4,2,0.2697442385827955,false),0,4,None,0.8925364632892262)))
+05:59:13.708 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(62,2,0,1,34,2,4,9,0.6513112983923433,false)
+05:59:13.708 [main] INFO  - Added edge Action(1,NodeObject(62,2,0,1,34,2,4,9,0.6513112983923433,false),NodeObject(232,3,18,1,2,3,0,18,0.4834293469515103,false),0,1,None,0.025505447719235574) from NodeObject(62,2,0,1,34,2,4,9,0.6513112983923433,false) to NodeObject(232,3,18,1,2,3,0,18,0.4834293469515103,false) successfully
+05:59:13.708 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(62,2,0,1,34,2,4,9,0.6513112983923433,false)),EdgeAdded(Action(1,NodeObject(62,2,0,1,34,2,4,9,0.6513112983923433,false),NodeObject(232,3,18,1,2,3,0,18,0.4834293469515103,false),0,1,None,0.025505447719235574)))
+05:59:13.708 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(156,0,7,1,24,1,2,8,0.05409389197822689,false)
+05:59:13.708 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(308,3,2,1,47,0,3,10,0.20899762178298853,false)
+05:59:13.708 [main] INFO  - Modified an edge: 
+05:59:13.708 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(127,4,2,1,49,1,1,10,0.10448891753617473,false)
+05:59:13.708 [main] INFO  - Added edge Action(2,NodeObject(127,4,2,1,49,1,1,10,0.10448891753617473,false),NodeObject(351,1,7,1,43,0,3,14,0.7422455358094244,false),0,0,Some(11),0.5180251641978004) from NodeObject(127,4,2,1,49,1,1,10,0.10448891753617473,false) to NodeObject(351,1,7,1,43,0,3,14,0.7422455358094244,false) successfully
+05:59:13.708 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(127,4,2,1,49,1,1,10,0.10448891753617473,false)),EdgeAdded(Action(2,NodeObject(127,4,2,1,49,1,1,10,0.10448891753617473,false),NodeObject(351,1,7,1,43,0,3,14,0.7422455358094244,false),0,0,Some(11),0.5180251641978004)))
+05:59:13.708 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(494,1,7,1,28,2,6,13,0.9788469532357262,false)
+05:59:13.709 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(310,1,4,1,93,3,5,10,0.35898359258094736,false)
+05:59:13.709 [main] INFO  - Added edge Action(6,NodeObject(310,1,4,1,93,3,5,10,0.35898359258094736,false),NodeObject(8,3,7,1,73,3,2,15,0.1255019390717016,false),5,45,None,0.15691702695947085) from NodeObject(310,1,4,1,93,3,5,10,0.35898359258094736,false) to NodeObject(8,3,7,1,73,3,2,15,0.1255019390717016,false) successfully
+05:59:13.709 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(310,1,4,1,93,3,5,10,0.35898359258094736,false)),EdgeAdded(Action(6,NodeObject(310,1,4,1,93,3,5,10,0.35898359258094736,false),NodeObject(8,3,7,1,73,3,2,15,0.1255019390717016,false),5,45,None,0.15691702695947085)))
+05:59:13.709 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(131,5,7,1,7,4,1,0,0.35983565326538125,false)
+05:59:13.709 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(418,6,3,1,24,1,5,18,0.4306556077172108,false)
+05:59:13.709 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(349,6,2,1,21,4,6,13,0.16138791330689772,false)
+05:59:13.709 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(129,6,18,1,76,4,5,3,0.4605675804676186,false)
+05:59:13.710 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(230,3,1,1,67,3,0,7,0.33002977533395905,false)
+05:59:13.710 [main] INFO  - Removed an edge from NodeObject(230,3,1,1,67,3,0,7,0.33002977533395905,false) to NodeObject(185,1,12,1,75,2,3,2,0.21318185039709314,false) successfully
+05:59:13.710 [main] INFO  - Added edge Action(16,NodeObject(230,3,1,1,67,3,0,7,0.33002977533395905,false),NodeObject(185,1,12,1,75,2,3,2,0.21318185039709314,false),4,1,Some(8),0.6902510466494763) from NodeObject(230,3,1,1,67,3,0,7,0.33002977533395905,false) to NodeObject(185,1,12,1,75,2,3,2,0.21318185039709314,false) successfully
+05:59:13.710 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(230,3,1,1,67,3,0,7,0.33002977533395905,false)),EdgeModified(Action(0,NodeObject(230,3,1,1,67,3,0,7,0.33002977533395905,false),NodeObject(185,1,12,1,75,2,3,2,0.21318185039709314,false),0,0,Some(44),0.513460356919955)))(OriginalNetComponent(NodeObject(230,3,1,1,67,3,0,7,0.33002977533395905,false)),EdgeRemoved(Action(4,NodeObject(230,3,1,1,67,3,0,7,0.33002977533395905,false),NodeObject(185,1,12,1,75,2,3,2,0.21318185039709314,false),0,0,Some(44),0.08069379727237003)))(OriginalNetComponent(NodeObject(230,3,1,1,67,3,0,7,0.33002977533395905,false)),EdgeAdded(Action(16,NodeObject(230,3,1,1,67,3,0,7,0.33002977533395905,false),NodeObject(185,1,12,1,75,2,3,2,0.21318185039709314,false),4,1,Some(8),0.6902510466494763)))
+05:59:13.711 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(239,6,10,1,57,0,1,5,0.2666786352605417,false)
+05:59:13.712 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(80,3,14,1,8,0,0,1,0.8339194461691737,false)
+05:59:13.712 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(41,6,3,1,99,2,4,4,0.6466837143077115,false)
+05:59:13.712 [main] INFO  - Added edge Action(13,NodeObject(41,6,3,1,99,2,4,4,0.6466837143077115,false),NodeObject(71,5,9,1,57,0,1,4,0.8167210658370864,false),47,4,Some(97),0.22218505417041012) from NodeObject(41,6,3,1,99,2,4,4,0.6466837143077115,false) to NodeObject(71,5,9,1,57,0,1,4,0.8167210658370864,false) successfully
+05:59:13.712 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(41,6,3,1,99,2,4,4,0.6466837143077115,false)),EdgeAdded(Action(13,NodeObject(41,6,3,1,99,2,4,4,0.6466837143077115,false),NodeObject(71,5,9,1,57,0,1,4,0.8167210658370864,false),47,4,Some(97),0.22218505417041012)))
+05:59:13.712 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(23,5,4,1,30,1,4,16,0.06372820389506773,false)
+05:59:13.712 [main] INFO  - Modified an edge: 
+05:59:13.712 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(10,0,7,1,89,3,5,18,0.8295885692462832,false)
+05:59:13.712 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(442,3,15,1,68,1,2,13,0.22232992063421864,false)
+05:59:13.712 [main] INFO  - Modified an edge: 
+05:59:13.712 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(36,5,1,1,15,4,3,13,0.544413348502682,false)
+05:59:13.712 [main] INFO  - Modified an edge: 
+05:59:13.712 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(107,3,19,1,96,4,1,5,0.9925950589903962,false)
+05:59:13.712 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(305,4,8,1,90,1,1,10,0.7785494101100965,false)
+05:59:13.713 [main] INFO  - Modified an edge: 
+05:59:13.713 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(347,3,7,1,30,2,3,6,0.20421031726004713,false)
+05:59:13.713 [main] INFO  - Removed an edge from NodeObject(347,3,7,1,30,2,3,6,0.20421031726004713,false) to NodeObject(263,5,19,1,5,4,3,11,0.12036374562776975,false) successfully
+05:59:13.713 [main] INFO  - Added edge Action(2,NodeObject(347,3,7,1,30,2,3,6,0.20421031726004713,false),NodeObject(263,5,19,1,5,4,3,11,0.12036374562776975,false),1,41,Some(25),0.13928208535901854) from NodeObject(347,3,7,1,30,2,3,6,0.20421031726004713,false) to NodeObject(263,5,19,1,5,4,3,11,0.12036374562776975,false) successfully
+05:59:13.713 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(347,3,7,1,30,2,3,6,0.20421031726004713,false)),EdgeModified(Action(4,NodeObject(347,3,7,1,30,2,3,6,0.20421031726004713,false),NodeObject(263,5,19,1,5,4,3,11,0.12036374562776975,false),6,13,None,0.19046548776794536)))(OriginalNetComponent(NodeObject(347,3,7,1,30,2,3,6,0.20421031726004713,false)),EdgeRemoved(Action(7,NodeObject(347,3,7,1,30,2,3,6,0.20421031726004713,false),NodeObject(263,5,19,1,5,4,3,11,0.12036374562776975,false),6,13,None,0.3288475847709579)))(OriginalNetComponent(NodeObject(347,3,7,1,30,2,3,6,0.20421031726004713,false)),EdgeAdded(Action(2,NodeObject(347,3,7,1,30,2,3,6,0.20421031726004713,false),NodeObject(263,5,19,1,5,4,3,11,0.12036374562776975,false),1,41,Some(25),0.13928208535901854)))
+05:59:13.713 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(72,1,5,1,25,4,2,1,0.5277000213383204,false)
+05:59:13.713 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(479,1,4,1,48,2,2,3,0.8381369185269706,false)
+05:59:13.713 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(447,3,6,1,62,2,6,10,0.4917392748673505,false)
+05:59:13.713 [main] INFO  - Added edge Action(1,NodeObject(447,3,6,1,62,2,6,10,0.4917392748673505,false),NodeObject(5,4,0,1,74,0,4,14,0.13415672086191754,false),16,2,Some(97),0.5544571961384478) from NodeObject(447,3,6,1,62,2,6,10,0.4917392748673505,false) to NodeObject(5,4,0,1,74,0,4,14,0.13415672086191754,false) successfully
+05:59:13.713 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(447,3,6,1,62,2,6,10,0.4917392748673505,false)),EdgeAdded(Action(1,NodeObject(447,3,6,1,62,2,6,10,0.4917392748673505,false),NodeObject(5,4,0,1,74,0,4,14,0.13415672086191754,false),16,2,Some(97),0.5544571961384478)))
+05:59:13.713 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(4,1,9,1,63,1,0,9,0.8145187837038507,false)
+05:59:13.713 [main] INFO  - Modified an edge: 
+05:59:13.713 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(388,5,4,1,17,3,4,7,0.9526732991243653,false)
+05:59:13.714 [main] INFO  - Modified an edge: 
+05:59:13.714 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false)
+05:59:13.714 [main] INFO  - Removed an edge from NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false) to NodeObject(106,4,9,1,60,3,4,9,0.3334444112963658,false) successfully
+05:59:13.714 [main] INFO  - Added edge Action(7,NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false),NodeObject(106,4,9,1,60,3,4,9,0.3334444112963658,false),0,7,None,0.2652684658850365) from NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false) to NodeObject(106,4,9,1,60,3,4,9,0.3334444112963658,false) successfully
+05:59:13.714 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false)),EdgeModified(Action(4,NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false),NodeObject(106,4,9,1,60,3,4,9,0.3334444112963658,false),0,1,Some(41),0.5189727555718785)))(OriginalNetComponent(NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false)),EdgeRemoved(Action(2,NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false),NodeObject(106,4,9,1,60,3,4,9,0.3334444112963658,false),0,1,Some(41),0.186033744704988)))(OriginalNetComponent(NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false)),EdgeAdded(Action(7,NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false),NodeObject(106,4,9,1,60,3,4,9,0.3334444112963658,false),0,7,None,0.2652684658850365)))
+05:59:13.714 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(194,3,2,1,98,4,0,3,0.4136045964537055,false)
+05:59:13.714 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(287,6,18,1,82,0,3,17,0.818522260160478,false)
+05:59:13.714 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(34,5,12,1,31,0,2,0,0.6798097638028352,false)
+05:59:13.714 [main] INFO  - Modified an edge: 
+05:59:13.714 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(43,4,1,1,84,2,1,5,0.8543773366349943,false)
+05:59:13.714 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(436,5,13,1,37,3,6,8,0.6748285169918845,false)
+05:59:13.715 [main] INFO  - Removed an edge from NodeObject(436,5,13,1,37,3,6,8,0.6748285169918845,false) to NodeObject(257,1,5,1,5,4,2,15,0.48478149395186143,false) successfully
+05:59:13.715 [main] INFO  - Added edge Action(15,NodeObject(436,5,13,1,37,3,6,8,0.6748285169918845,false),NodeObject(257,1,5,1,5,4,2,15,0.48478149395186143,false),44,3,Some(31),0.5070523253178418) from NodeObject(436,5,13,1,37,3,6,8,0.6748285169918845,false) to NodeObject(257,1,5,1,5,4,2,15,0.48478149395186143,false) successfully
+05:59:13.715 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(436,5,13,1,37,3,6,8,0.6748285169918845,false)),EdgeModified(Action(8,NodeObject(436,5,13,1,37,3,6,8,0.6748285169918845,false),NodeObject(257,1,5,1,5,4,2,15,0.48478149395186143,false),3,2,None,0.30415658331915085)))(OriginalNetComponent(NodeObject(436,5,13,1,37,3,6,8,0.6748285169918845,false)),EdgeRemoved(Action(6,NodeObject(436,5,13,1,37,3,6,8,0.6748285169918845,false),NodeObject(257,1,5,1,5,4,2,15,0.48478149395186143,false),3,2,None,0.9184596198542923)))(OriginalNetComponent(NodeObject(436,5,13,1,37,3,6,8,0.6748285169918845,false)),EdgeAdded(Action(15,NodeObject(436,5,13,1,37,3,6,8,0.6748285169918845,false),NodeObject(257,1,5,1,5,4,2,15,0.48478149395186143,false),44,3,Some(31),0.5070523253178418)))
+05:59:13.715 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(383,1,17,1,9,0,6,2,0.23767680409484115,false)
+05:59:13.715 [main] INFO  - Modified an edge: 
+05:59:13.715 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(299,1,15,1,27,4,5,4,0.6936542947878953,false)
+05:59:13.715 [main] INFO  - Added edge Action(4,NodeObject(299,1,15,1,27,4,5,4,0.6936542947878953,false),NodeObject(404,5,16,1,64,1,5,2,0.33093223425409357,false),10,77,Some(19),0.6701340440011218) from NodeObject(299,1,15,1,27,4,5,4,0.6936542947878953,false) to NodeObject(404,5,16,1,64,1,5,2,0.33093223425409357,false) successfully
+05:59:13.715 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(299,1,15,1,27,4,5,4,0.6936542947878953,false)),EdgeAdded(Action(4,NodeObject(299,1,15,1,27,4,5,4,0.6936542947878953,false),NodeObject(404,5,16,1,64,1,5,2,0.33093223425409357,false),10,77,Some(19),0.6701340440011218)))
+05:59:13.715 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(455,3,14,1,93,0,0,14,0.13984097013269314,false)
+05:59:13.715 [main] INFO  - Added edge Action(2,NodeObject(455,3,14,1,93,0,0,14,0.13984097013269314,false),NodeObject(318,1,7,1,80,4,3,10,0.19015076610435766,false),2,4,None,0.6796317749968733) from NodeObject(455,3,14,1,93,0,0,14,0.13984097013269314,false) to NodeObject(318,1,7,1,80,4,3,10,0.19015076610435766,false) successfully
+05:59:13.715 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(455,3,14,1,93,0,0,14,0.13984097013269314,false)),EdgeAdded(Action(2,NodeObject(455,3,14,1,93,0,0,14,0.13984097013269314,false),NodeObject(318,1,7,1,80,4,3,10,0.19015076610435766,false),2,4,None,0.6796317749968733)))
+05:59:13.715 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(6,3,3,1,90,0,0,15,0.6149594247369982,false)
+05:59:13.715 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(398,5,10,1,93,1,6,2,0.0036945997670391195,false)
+05:59:13.715 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(441,4,18,1,43,0,6,2,0.45370152531764407,false)
+05:59:13.715 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(322,6,13,1,10,2,6,5,0.5350047652187936,false)
+05:59:13.716 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(276,6,2,1,15,1,3,19,0.3242813268325532,false)
+05:59:13.716 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(370,2,16,1,6,3,1,14,0.9969917179958873,false)
+05:59:13.717 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(408,2,11,1,82,4,4,7,0.4164226470860315,false)
+05:59:13.718 [main] INFO  - Modified an edge: 
+05:59:13.718 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(98,6,15,1,77,1,6,12,0.9165431285541379,false)
+05:59:13.718 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(325,3,3,1,12,1,5,6,0.2762635228546696,false)
+05:59:13.718 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(361,0,3,1,94,4,5,14,0.9998927136675692,false)
+05:59:13.718 [main] INFO  - Removed an edge from NodeObject(361,0,3,1,94,4,5,14,0.9998927136675692,false) to NodeObject(86,3,4,1,84,2,1,5,0.17070178488143828,false) successfully
+05:59:13.718 [main] INFO  - Added edge Action(9,NodeObject(361,0,3,1,94,4,5,14,0.9998927136675692,false),NodeObject(86,3,4,1,84,2,1,5,0.17070178488143828,false),0,22,None,0.8129121496792583) from NodeObject(361,0,3,1,94,4,5,14,0.9998927136675692,false) to NodeObject(86,3,4,1,84,2,1,5,0.17070178488143828,false) successfully
+05:59:13.718 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(361,0,3,1,94,4,5,14,0.9998927136675692,false)),EdgeModified(Action(15,NodeObject(361,0,3,1,94,4,5,14,0.9998927136675692,false),NodeObject(86,3,4,1,84,2,1,5,0.17070178488143828,false),0,38,Some(42),0.5370316597291318)))(OriginalNetComponent(NodeObject(361,0,3,1,94,4,5,14,0.9998927136675692,false)),EdgeRemoved(Action(4,NodeObject(361,0,3,1,94,4,5,14,0.9998927136675692,false),NodeObject(86,3,4,1,84,2,1,5,0.17070178488143828,false),0,38,Some(42),0.9828277361708431)))(OriginalNetComponent(NodeObject(361,0,3,1,94,4,5,14,0.9998927136675692,false)),EdgeAdded(Action(9,NodeObject(361,0,3,1,94,4,5,14,0.9998927136675692,false),NodeObject(86,3,4,1,84,2,1,5,0.17070178488143828,false),0,22,None,0.8129121496792583)))
+05:59:13.718 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(108,4,16,1,17,1,3,19,0.9865334269511825,false)
+05:59:13.718 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(252,5,4,1,12,1,6,11,0.8752460113177694,false)
+05:59:13.718 [main] INFO  - Modified an edge: 
+05:59:13.718 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(170,3,4,1,14,2,1,7,0.5518786711051133,false)
+05:59:13.718 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(484,1,2,1,34,2,3,8,0.5573455672154626,false)
+05:59:13.718 [main] INFO  - Modified an edge: 
+05:59:13.718 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(254,3,0,1,62,3,6,14,0.06019390546457093,false)
+05:59:13.718 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(456,3,11,1,66,1,5,4,0.16247718184369675,false)
+05:59:13.718 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(488,5,11,1,22,3,6,5,0.9409453649878878,false)
+05:59:13.718 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(95,2,14,1,36,0,4,18,0.5026892526391162,false)
+05:59:13.719 [main] INFO  - Added edge Action(9,NodeObject(95,2,14,1,36,0,4,18,0.5026892526391162,false),NodeObject(302,1,13,1,57,1,1,10,0.9572497188391623,false),1,0,Some(14),0.5205651478084453) from NodeObject(95,2,14,1,36,0,4,18,0.5026892526391162,false) to NodeObject(302,1,13,1,57,1,1,10,0.9572497188391623,false) successfully
+05:59:13.719 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(95,2,14,1,36,0,4,18,0.5026892526391162,false)),EdgeAdded(Action(9,NodeObject(95,2,14,1,36,0,4,18,0.5026892526391162,false),NodeObject(302,1,13,1,57,1,1,10,0.9572497188391623,false),1,0,Some(14),0.5205651478084453)))
+05:59:13.719 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(161,1,5,1,62,1,6,18,0.3393062781526275,false)
+05:59:13.719 [main] INFO  - Modified an edge: 
+05:59:13.719 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(335,3,5,1,70,0,5,3,0.2854237827356674,false)
+05:59:13.719 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(215,0,8,1,6,4,3,16,0.5880275794127676,false)
+05:59:13.719 [main] INFO  - Added edge Action(13,NodeObject(215,0,8,1,6,4,3,16,0.5880275794127676,false),NodeObject(500,2,8,1,7,2,2,18,0.7687873456647975,false),0,13,Some(55),0.21610936196783137) from NodeObject(215,0,8,1,6,4,3,16,0.5880275794127676,false) to NodeObject(500,2,8,1,7,2,2,18,0.7687873456647975,false) successfully
+05:59:13.719 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(215,0,8,1,6,4,3,16,0.5880275794127676,false)),EdgeAdded(Action(13,NodeObject(215,0,8,1,6,4,3,16,0.5880275794127676,false),NodeObject(500,2,8,1,7,2,2,18,0.7687873456647975,false),0,13,Some(55),0.21610936196783137)))
+05:59:13.719 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(110,6,0,1,78,4,0,14,0.3440101913143283,false)
+05:59:13.719 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(8,3,7,1,73,3,2,15,0.1255019390717016,false)
+05:59:13.719 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(445,0,8,1,86,0,5,2,0.2342684482633307,false)
+05:59:13.719 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(323,1,11,1,39,0,3,6,0.045584596530555244,false)
+05:59:13.719 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(14,6,15,1,44,1,0,8,0.4082940481591827,false)
+05:59:13.719 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(91,2,18,1,71,4,4,4,0.2272043602219096,false)
+05:59:13.720 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(304,3,0,1,81,3,1,15,0.11566004400293561,false)
+05:59:13.720 [main] INFO  - Modified an edge: 
+05:59:13.720 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(24,6,5,1,21,3,4,8,0.8733124736862767,false)
+05:59:13.720 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(348,0,9,1,47,4,5,10,0.4327794954408154,false)
+05:59:13.720 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(411,4,18,1,53,0,2,13,0.5575824812159219,false)
+05:59:13.720 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(163,2,5,1,80,3,4,18,0.5167848524064623,false)
+05:59:13.720 [main] INFO  - Modified an edge: 
+05:59:13.720 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(205,6,9,1,81,1,3,15,0.7009078532342685,false)
+05:59:13.720 [main] INFO  - Removed an edge from NodeObject(205,6,9,1,81,1,3,15,0.7009078532342685,false) to NodeObject(1,2,10,1,56,0,6,9,0.8338722071196073,false) successfully
+05:59:13.720 [main] INFO  - Added edge Action(3,NodeObject(205,6,9,1,81,1,3,15,0.7009078532342685,false),NodeObject(1,2,10,1,56,0,6,9,0.8338722071196073,false),6,0,None,0.9007244816674618) from NodeObject(205,6,9,1,81,1,3,15,0.7009078532342685,false) to NodeObject(1,2,10,1,56,0,6,9,0.8338722071196073,false) successfully
+05:59:13.720 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(205,6,9,1,81,1,3,15,0.7009078532342685,false)),EdgeModified(Action(4,NodeObject(205,6,9,1,81,1,3,15,0.7009078532342685,false),NodeObject(1,2,10,1,56,0,6,9,0.8338722071196073,false),106,0,Some(96),0.36541521931951404)))(OriginalNetComponent(NodeObject(205,6,9,1,81,1,3,15,0.7009078532342685,false)),EdgeRemoved(Action(1,NodeObject(205,6,9,1,81,1,3,15,0.7009078532342685,false),NodeObject(1,2,10,1,56,0,6,9,0.8338722071196073,false),106,0,Some(96),0.9049244867590365)))(OriginalNetComponent(NodeObject(205,6,9,1,81,1,3,15,0.7009078532342685,false)),EdgeAdded(Action(3,NodeObject(205,6,9,1,81,1,3,15,0.7009078532342685,false),NodeObject(1,2,10,1,56,0,6,9,0.8338722071196073,false),6,0,None,0.9007244816674618)))
+05:59:13.720 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(199,0,3,1,13,2,1,11,0.942198169242523,false)
+05:59:13.720 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(31,2,9,1,10,2,5,8,0.8488490744967568,false)
+05:59:13.721 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(309,4,18,1,97,3,3,8,0.9300395265768006,false)
+05:59:13.721 [main] INFO  - Added edge Action(5,NodeObject(309,4,18,1,97,3,3,8,0.9300395265768006,false),NodeObject(91,2,18,1,37,4,16,4,0.22683898792650536,false),54,65,Some(44),0.7446741484351539) from NodeObject(309,4,18,1,97,3,3,8,0.9300395265768006,false) to NodeObject(91,2,18,1,37,4,16,4,0.22683898792650536,false) successfully
+05:59:13.721 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(309,4,18,1,97,3,3,8,0.9300395265768006,false)),EdgeAdded(Action(5,NodeObject(309,4,18,1,97,3,3,8,0.9300395265768006,false),NodeObject(91,2,18,1,37,4,16,4,0.22683898792650536,false),54,65,Some(44),0.7446741484351539)))
+05:59:13.721 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(343,2,18,1,87,3,4,8,0.3521911575141691,false)
+05:59:13.721 [main] INFO  - Added edge Action(7,NodeObject(343,2,18,1,87,3,4,8,0.3521911575141691,false),NodeObject(184,6,11,1,26,3,4,7,0.557337654066602,false),87,60,Some(17),0.11252083378862654) from NodeObject(343,2,18,1,87,3,4,8,0.3521911575141691,false) to NodeObject(184,6,11,1,26,3,4,7,0.557337654066602,false) successfully
+05:59:13.721 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(343,2,18,1,87,3,4,8,0.3521911575141691,false)),EdgeAdded(Action(7,NodeObject(343,2,18,1,87,3,4,8,0.3521911575141691,false),NodeObject(184,6,11,1,26,3,4,7,0.557337654066602,false),87,60,Some(17),0.11252083378862654)))
+05:59:13.721 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(405,4,11,1,19,0,0,4,0.5281916376272807,false)
+05:59:13.721 [main] INFO  - Removed an edge from NodeObject(405,4,11,1,19,0,0,4,0.5281916376272807,false) to NodeObject(109,4,16,1,40,0,0,6,0.814111488492861,false) successfully
+05:59:13.721 [main] INFO  - Added edge Action(8,NodeObject(405,4,11,1,19,0,0,4,0.5281916376272807,false),NodeObject(109,4,16,1,40,0,0,6,0.814111488492861,false),0,0,Some(88),0.740364001843668) from NodeObject(405,4,11,1,19,0,0,4,0.5281916376272807,false) to NodeObject(109,4,16,1,40,0,0,6,0.814111488492861,false) successfully
+05:59:13.721 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(405,4,11,1,19,0,0,4,0.5281916376272807,false)),EdgeModified(Action(16,NodeObject(405,4,11,1,19,0,0,4,0.5281916376272807,false),NodeObject(109,4,16,1,40,0,0,6,0.814111488492861,false),3,3,Some(54),0.10891665303546172)))(OriginalNetComponent(NodeObject(405,4,11,1,19,0,0,4,0.5281916376272807,false)),EdgeRemoved(Action(0,NodeObject(405,4,11,1,19,0,0,4,0.5281916376272807,false),NodeObject(109,4,16,1,40,0,0,6,0.814111488492861,false),3,3,Some(54),0.7115648372396016)))(OriginalNetComponent(NodeObject(405,4,11,1,19,0,0,4,0.5281916376272807,false)),EdgeAdded(Action(8,NodeObject(405,4,11,1,19,0,0,4,0.5281916376272807,false),NodeObject(109,4,16,1,40,0,0,6,0.814111488492861,false),0,0,Some(88),0.740364001843668)))
+05:59:13.721 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(22,6,2,1,69,4,0,9,0.31154359276988863,false)
+05:59:13.722 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(229,6,17,1,39,4,0,16,0.6959958403082313,false)
+05:59:13.722 [main] INFO  - Modified an edge: 
+05:59:13.722 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(118,5,14,1,76,4,2,13,0.4431600306917358,false)
+05:59:13.723 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(285,2,7,1,35,2,2,17,0.6999454307269343,false)
+05:59:13.723 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(61,1,11,1,61,2,0,14,0.04515342982052983,false)
+05:59:13.723 [main] INFO  - Applying perturbation REMOVENODE on node NodeObject(301,6,15,1,11,1,4,0,0.8992564191560839,false)
+05:59:13.723 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(277,2,19,1,97,2,5,15,0.9620952364187755,false)
+05:59:13.724 [main] INFO  - Added edge Action(11,NodeObject(277,2,19,1,97,2,5,15,0.9620952364187755,false),NodeObject(263,5,19,1,5,4,3,11,0.12036374562776975,false),5,64,Some(49),0.6755309049641659) from NodeObject(277,2,19,1,97,2,5,15,0.9620952364187755,false) to NodeObject(263,5,19,1,5,4,3,11,0.12036374562776975,false) successfully
+05:59:13.724 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(277,2,19,1,97,2,5,15,0.9620952364187755,false)),EdgeAdded(Action(11,NodeObject(277,2,19,1,97,2,5,15,0.9620952364187755,false),NodeObject(263,5,19,1,5,4,3,11,0.12036374562776975,false),5,64,Some(49),0.6755309049641659)))
+05:59:13.724 [main] INFO  - Applying perturbation MODIFYNODE on node NodeObject(464,3,10,1,57,4,1,17,0.28315217602923815,false)
+05:59:13.724 [main] INFO  - Applying perturbation ADDEDGE on node NodeObject(106,4,9,1,60,3,4,9,0.3334444112963658,false)
+05:59:13.724 [main] INFO  - Added edge Action(2,NodeObject(106,4,9,1,60,3,4,9,0.3334444112963658,false),NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false),14,0,None,0.274876550918008) from NodeObject(106,4,9,1,60,3,4,9,0.3334444112963658,false) to NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false) successfully
+05:59:13.724 [main] INFO  - Modified an edge: (OriginalNetComponent(NodeObject(106,4,9,1,60,3,4,9,0.3334444112963658,false)),EdgeAdded(Action(2,NodeObject(106,4,9,1,60,3,4,9,0.3334444112963658,false),NodeObject(397,0,4,1,33,4,3,14,0.16704116409101766,false),14,0,None,0.274876550918008)))
+05:59:13.724 [main] INFO  - Applying perturbation REMOVEEDGE on node NodeObject(175,3,18,1,28,1,0,17,0.3935575931118328,false)
+05:59:13.724 [main] INFO  - Modified an edge: 
+05:59:13.724 [main] INFO  - Applying perturbation ADDNODE on node NodeObject(377,2,8,1,96,4,5,1,0.213542512316498,false)
+05:59:13.729 [main] INFO  - Successfully persisted the graph in json to outputs/test_graph.ngs.perturbed
+05:59:13.729 [main] INFO  - Generating DOT file for graph with 499 nodes for visualization as outputs/test_graph.ngs.perturbed.dot
+05:59:13.757 [main] INFO  - Successfully rendered the graph to outputs/test_graph.ngs.perturbed.dot
+05:59:13.758 [main] INFO  - A graph image file for the perturbed graph can be generated using the following command: sfdp -x -Goverlap=scale -Tpng outputs/test_graph.ngs.perturbed.dot > outputs/test_graph.ngs.perturbed.png
+05:59:13.759 [main] INFO  - 85 nodes and 192 edges have been perturbed
+05:59:13.759 [main] INFO  - There are 27 modified nodes, 28 added nodes and 30 removed nodes.
+05:59:13.759 [main] INFO  - There are 12 modified edges, 58 added edges and 122 removed edges.
+05:59:13.760 [main] INFO  - Diff yaml file outputs/test_graph.ngs.yaml contains the delta between the original and the perturbed graphs.
+05:59:13.761 [main] INFO  - Done! Please check the content of the output directory outputs/
