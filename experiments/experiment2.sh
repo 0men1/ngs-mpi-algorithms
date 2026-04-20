@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Experiment 2: 50 nodes with 2 MPI ranks
+# Experiment 2: 51 nodes with 2 MPI ranks (50 + 1 initial node)
 # Compare smaller graph with fewer partitions
 #
 # Prerequisites:

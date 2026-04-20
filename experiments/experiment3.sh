@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Experiment 3: 200 nodes with 10 MPI ranks
+# Experiment 3: 201 nodes with 10 MPI ranks (200 + 1 initial node)
 # Test large graph with many partitions
 #
 # Prerequisites:

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Experiment 1: 100 nodes with 5 MPI ranks
+# Experiment 1: 101 nodes with 5 MPI ranks (100 + 1 initial node)
 # Compare scaling with more partitions
 #
 # Prerequisites:
