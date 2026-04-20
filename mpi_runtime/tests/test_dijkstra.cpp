@@ -5,7 +5,7 @@
  * The algorithm computes shortest paths from a source node to all other nodes
  * in a distributed manner using MPI communication.
  * 
- * Total Tests: 18
+ * Total Tests: 19
  */
 
 #include "DistributedDijkstra.h"

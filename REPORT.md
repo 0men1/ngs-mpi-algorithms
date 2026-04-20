@@ -4,13 +4,14 @@
 1. [Executive Summary](#1-executive-summary)
 2. [Architectural Design](#2-architectural-design)
 3. [Implementation Details](#3-implementation-details)
-4. [Determinism and Stability](#4-determinism-and-stability)
-5. [Algorithm Choices](#5-algorithm-choices)
-6. [Data Formats](#6-data-formats)
-7. [Assumptions for Correctness](#7-assumptions-for-correctness)
-8. [Experimental Design and Analysis](#8-experimental-design-and-analysis)
-9. [Key Insights and Decisions](#9-key-insights-and-decisions)
-10. [Conclusion](#10-conclusion)
+4. [Testing Methodology](#4-testing-methodology)
+5. [Determinism and Stability](#5-determinism-and-stability)
+6. [Algorithm Choices](#6-algorithm-choices)
+7. [Data Formats](#7-data-formats)
+8. [Assumptions for Correctness](#8-assumptions-for-correctness)
+9. [Experimental Design and Analysis](#9-experimental-design-and-analysis)
+10. [Key Insights and Decisions](#10-key-insights-and-decisions)
+11. [Conclusion](#11-conclusion)
 
 ---
 
@@ -113,6 +114,31 @@ Strict determinism is enforced across the system to guarantee absolute reproduci
 1. **Graph Generation Phase: ** The Python enrichment script uses a pseudo-random number generator initialized with an explicit CLI seed (random.seed(seed)). This ensures the stochastic distribution of positive edge weights is identical across consecutive runs using the same input configuration.
 
 2. **Runtime Phase: ** Implicit variability derived from memory layouts and hashing algorithms is explicitly eliminated. All internal C++ containers requiring iteration (e.g., m_adjList, currentMax, nextMax) strictly utilize ordered std::map instead of std::unordered_map. This guarantees stable execution ordering over nodes and edges, locking the MPI message serialization sequence to the exact same byte order on every run.
+
+---
+
+## Testing Methodology
+
+The system utilizes the Google Test framework wrapped in MPI context (MPI_Init/MPI_Finalize) to execute 29 isolated unit and integration tests across multiple distributed ranks. Test execution targets deterministic, pre-computed JSON graph topologies—including a 10-node weighted complex graph, a 4-node complete bipartite graph, and a 5-node linear chain to guarantee predictable message routing and validation baselines.
+
+**Distributed Dijkstra Validation (19 Tests):**
+    - **Distance Verification:** Core correctness is enforced by asserting the runtime-computed distance vector against mathematically derived shortest-path distances. Tests iterate through variable source nodes (e.g., origin node 0 vs. origin node 5) to guarantee routing logic is origin-agnostic.
+
+    - **Invariant Enforcement:** Verifies algorithm preconditions, asserting that all edge weights across standard and ghost-node boundaries are strictly non-negative.
+
+    - **Reachability:** Asserts that all nodes owned by a local rank resolve to finite distances to guarantee graph traversal connectivity.
+
+    - **Diagnostic Auditing:** Validates telemetry accumulators for point-to-point message counts and transmitted byte payloads.
+
+**Distributed Leader Election Validation (10 Tests):**
+
+    - **Global Consensus:** Correctness is defined by unanimous agreement. Tests assert that the final map of elected leaders on every rank resolves exclusively to the highest integer node ID present in the global graph.
+
+    - **Boundary Validation:** Ensures the computed leader ID is a valid node within the graph structure and restricts local ranks to only tracking states for their assigned partitions.
+
+    - **Convergence Stability:** Tests standard execution thresholds against extreme round limits (e.g., 100 rounds) to verify memory stability and proper termination of the flooding mechanism.
+
+    - **Metric Accuracy:** Asserts iteration counts explicitly match the round configurations alongside collective network telemetry.
 
 ---
 
