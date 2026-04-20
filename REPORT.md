@@ -1,17 +1,17 @@
 # MPI Distributed Graph Algorithm Runtime - Technical Report
 
 ## Table of Contents
-1. [Executive Summary](#1-executive-summary)
-2. [Architectural Design](#2-architectural-design)
-3. [Implementation Details](#3-implementation-details)
-4. [Testing Methodology](#4-testing-methodology)
-5. [Determinism and Stability](#5-determinism-and-stability)
-6. [Algorithm Choices](#6-algorithm-choices)
-7. [Data Formats](#7-data-formats)
-8. [Assumptions for Correctness](#8-assumptions-for-correctness)
-9. [Experimental Design and Analysis](#9-experimental-design-and-analysis)
-10. [Key Insights and Decisions](#10-key-insights-and-decisions)
-11. [Conclusion](#11-conclusion)
+1. [Executive Summary](#executive-summary)
+2. [Architectural Design](#architectural-design)
+3. [Implementation Details](#implementation-details)
+4. [Testing Methodology](#testing-methodology)
+5. [Determinism and Stability](#determinism-and-stability)
+6. [Algorithm Choices](#algorithm-choices)
+7. [Data Formats](#data-formats)
+8. [Assumptions for Correctness](#assumptions-for-correctness)
+9. [Experimental Design and Analysis](#experimental-design-and-analysis)
+10. [Key Insights and Decisions](#key-insights-and-decisions)
+11. [Conclusion](#conclusion)
 
 ---
 
