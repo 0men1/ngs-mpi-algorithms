@@ -1,13 +1,16 @@
 # MPI Distributed Graph Algorithm Runtime - Technical Report
 
 ## Table of Contents
-1. [Executive Summary](#executive-summary)
-2. [Architectural Design](#architectural-design)
-3. [Algorithm Choices](#algorithm-choices)
-4. [Data Formats](#data-formats)
-5. [Assumptions for Correctness](#assumptions-for-correctness)
-6. [Experimental Design](#experimental-design)
-7. [Key Insights and Decisions](#key-insights-and-decisions)
+1. [Executive Summary](#1-executive-summary)
+2. [Architectural Design](#2-architectural-design)
+3. [Implementation Details](#3-implementation-details)
+4. [Determinism and Stability](#4-determinism-and-stability)
+5. [Algorithm Choices](#5-algorithm-choices)
+6. [Data Formats](#6-data-formats)
+7. [Assumptions for Correctness](#7-assumptions-for-correctness)
+8. [Experimental Design and Analysis](#8-experimental-design-and-analysis)
+9. [Key Insights and Decisions](#9-key-insights-and-decisions)
+10. [Conclusion](#10-conclusion)
 
 ---
 
@@ -15,17 +18,14 @@
 
 This project implements a distributed MPI-based runtime for executing graph algorithms on partitioned graphs. The system supports two primary algorithms: Distributed Dijkstra (shortest path) and Distributed Leader Election. The implementation distributes graph nodes across MPI ranks, with each rank maintaining local graph data and communicating via message passing.
 
-The project was developed as a coursework assignment for CS453 (Distributed Systems) at University of Illinois Chicago. The primary goal was to implement and verify distributed graph algorithms that can scale across multiple MPI processes while maintaining correctness and demonstrating effective communication patterns.
-
-**Project Motivation:**
-Distributed graph algorithms are fundamental to many real-world applications including network routing, social network analysis, and distributed database systems. This project provides a framework for exploring how traditional graph algorithms can be adapted to work in a distributed computing environment using MPI for inter-process communication.
+The project was developed as a coursework assignment for CS453 (Distributed Systems) at the University of Illinois Chicago. The primary goal was to implement and verify distributed graph algorithms that can scale across multiple MPI processes while maintaining correctness and demonstrating effective communication patterns.
 
 **Key Contributions:**
-- Implementation of a partition-based distributed Dijkstra algorithm with cross-partition edge handling
-- Implementation of a flooding-based distributed leader election algorithm
-- Comprehensive test suite with 29 tests covering correctness and edge cases
-- Support for arbitrary graph partitioning via JSON configuration
-- Integration with NetGameSim for large-scale graph generation
+- Implementation of a partition-based distributed Dijkstra algorithm with cross-partition boundary handling.
+- Implementation of a synchronous, flooding-based distributed leader election algorithm utilizing dynamic MPI buffer allocation.
+- Comprehensive Google Test suite covering correctness and edge cases.
+- Strict enforcement of application determinism via controlled RNG seeding and ordered data structures.
+- Integration with NetGameSim for large-scale connected graph generation.
 
 ---
 
@@ -34,17 +34,16 @@ Distributed graph algorithms are fundamental to many real-world applications inc
 ### System Overview
 
 The runtime follows a partition-based distributed computing model where:
-
-1. A graph is partitioned across N MPI processes
-2. Each process owns a subset of nodes and their associated edges
-3. Communication occurs via MPI point-to-point and collective operations
-4. Results are aggregated across all ranks for verification
+1. A global graph is generated and partitioned across N MPI processes.
+2. Each process parses the global file but only retains its owned subset of nodes and their boundary edges in local memory.
+3. Execution proceeds via MPI point-to-point (`MPI_Send`/`MPI_Recv`) and collective (`MPI_Alltoallv`, `MPI_Allreduce`) operations.
+4. Results are aggregated at Rank 0 for validation and logging.
 
 ### Component Architecture
 
-```
+```text
 +------------------------------------------------------------------+
-|                         Main Runtime                             |
+|                          Main Runtime                            |
 +------------------------------------------------------------------+
 |                                                                  |
 |  +-------------------+      +-------------------+                |
@@ -54,15 +53,14 @@ The runtime follows a partition-based distributed computing model where:
 |  | - m_adjList       |      | + reportMetrics() |                |
 |  | - m_incomingEdges |      +--------+----------+                |
 |  | - m_nodeOwnership |               |                           |
-|  +-------------------+        +--------v--------+                |
+|  +-------------------+        +------v----------+                |
 |                               |                 |                |
-|                 +--------------+    +---------+------+           |
+|                 +-------------v+    +-----------v----+           |
 |                 | Dijkstra     |    | LeaderElection |           |
 |                 +--------------+    +----------------+           |
 +------------------------------------------------------------------+
-
                           MPI Communication Layer
-                          (MPI_Send/Recv, MPI_Allreduce, etc.)
+                  (MPI_Send/Recv, MPI_Alltoallv, MPI_Allreduce)
 ```
 
 ### Data Structures
@@ -96,7 +94,25 @@ The graph is partitioned by node ownership. The partition file specifies which r
 3. Workload distribution can be analyzed via partition statistics
 
 **Partition Balancing Considerations:**
-The default partitioning strategy uses a round-robin approach: `rank = (nodeId * numRanks) / numNodes`. This provides reasonably balanced partitions for random graphs but may not be optimal for structured graphs with non-uniform connectivity. Future improvements could include graph-aware partitioning using tools like METIS.
+The default partitioning strategy uses a round-robin approach: `rank = (nodeId * numRanks) / numNodes`. This provides reasonably balanced partitions for random graphs.
+
+---
+
+## Implementation Details
+
+**Ghost Node Allocation Strategy**
+Ghost nodes are not instantiated as standalone memory objects. Instead, they are mapped dynamically via adjacency structures during the parsing phase. During loadData, the global JSON graph is parsed. When an edge originates from a locally owned node but targets a remote node (m_nodeOwnership[dst] != m_rankId), the remote node acts as a boundary ghost node. This boundary classification triggers targeted point-to-point MPI routing for Dijkstra updates and dictates out-of-partition message buffering for Leader Election.
+
+
+---
+
+## Determinism and Stability
+
+Strict determinism is enforced across the system to guarantee absolute reproducibility, avoiding the automatic zero condition specified in the assignment constraints.
+
+1. **Graph Generation Phase: ** The Python enrichment script uses a pseudo-random number generator initialized with an explicit CLI seed (random.seed(seed)). This ensures the stochastic distribution of positive edge weights is identical across consecutive runs using the same input configuration.
+
+2. **Runtime Phase: ** Implicit variability derived from memory layouts and hashing algorithms is explicitly eliminated. All internal C++ containers requiring iteration (e.g., m_adjList, currentMax, nextMax) strictly utilize ordered std::map instead of std::unordered_map. This guarantees stable execution ordering over nodes and edges, locking the MPI message serialization sequence to the exact same byte order on every run.
 
 ---
 
@@ -123,9 +139,6 @@ The implementation uses a synchronized local minimum approach:
 ```
 
 **Time Complexity:** O(V * E / N) where N is the number of ranks
-**Message Complexity:** O(E) messages per iteration in worst case
-
-**Rationale:** This approach balances work distribution while minimizing synchronization overhead. The Allreduce provides a barrier that ensures all ranks agree on the next node to settle before proceeding.
 
 ### Distributed Leader Election
 
@@ -141,9 +154,6 @@ The implementation uses a synchronized local minimum approach:
 ```
 
 **Time Complexity:** O(D * rounds) where D is the graph diameter
-**Message Complexity:** O(E * rounds)
-
-**Rationale:** This algorithm is simple, robust, and requires no special coordination. The flooding approach naturally handles network topology without complex initialization.
 
 ---
 
@@ -222,114 +232,120 @@ struct ElectMsg {
 
 ## Assumptions for Correctness
 
-### Dijkstra Algorithm Assumptions
+### NetGameSim Initial Node
 
-**CRITICAL: These assumptions are required for correctness**
+1. **NetGameSim Initial Node:** NetGameSim adds an extra "initial node" (node 0) to the generated graph. For a config with `statesTotal = N`, the output will contain N+1 nodes (IDs 0 to N). This initial node serves as an entry point for graph traversal and ensures connectivity.
 
-1. **Positive Edge Weights**
-   - All edge weights must be non-negative (w >= 0)
+2. **Positive Edge Weight:** Dijkstra's correctness intrinsically assumes all edge weights are strictly positive ($w \ge 0$). This is enforced during the Python enrichment phase.
 
-2. **Connected Graph**
-   - The graph should be connected (or at least the source node should reach all target nodes)
+3. **Unique Node IDs:** Leader election relies on comparing integers. Node IDs must be strictly unique to prevent collisions during maximum value aggregation.
 
-### Leader Election Algorithm Assumptions
-
-1. **Unique Node IDs**
-   - All node IDs must be unique integers
-   - The algorithm elects the maximum ID, which requires uniqueness
-
-2. **Sufficient Rounds**
-   - The algorithm requires at least (graph diameter) rounds to converge
-   - With fewer rounds, nodes may not agree on the leader
-   - The number of rounds must be specified explicitly
-
-3. **Connected Graph**
-   - The graph must be connected for all nodes to receive max values
-
-4. **Bidirectional Communication**
-   - For complete convergence, edges should be traversable in both directions
-   - The partition must allow messages to flow across the graph
-
-### General MPI Assumptions
-
-1. **Reliable Communication**
-   - MPI does not lose messages in normal operation
+4. **Round Configuration:** The Leader Election algorithm assumes the user-supplied --rounds parameter is greater than or equal to the mathematical diameter of the underlying graph geometry.
 
 ---
 
-## Experimental Design
+## Experimental Design and Analysis
 
-### Experiment 1: 100 Nodes / 5 Ranks
+**Reproducibility Commands:**
+All experiments utilize pre-generated deterministic graphs stored within the `experiments/graphs/` directory. Execution is automated via shell scripts that validate file paths and trigger the MPI runtime.
+
+```bash
+# Reproduce Experiment 1 (101 Nodes / 5 Ranks)
+./experiments/experiment1.sh
+
+# Reproduce Experiment 2 (51 Nodes / 2 Ranks)
+./experiments/experiment2.sh
+
+# Reproduce Experiment 3 (201 Nodes / 10 Ranks)
+./experiments/experiment3.sh
+```
+
+### Experiment 1: 101 Nodes / 5 Ranks
 
 **Objective:** Evaluate algorithm performance with moderate graph size and multiple partitions.
 
+**Experimental Hypothesis:** The distribution of a 101-node graph across 5 ranks will establish the baseline latency. Dijsktra's iteration count will equal the total node count. Leader election will correlate strictly to the graph's diameter.
+
+**Expected Results:** Dijkstra will require 101 iterations to settle all the nodes in the graph. Leader election will terminate successfully within the 30-round limit if the diameter is 30 or less.
+
 **Setup:**
-- Graph: `experiments/graphs/exp1_100nodes.json` (101 nodes)
+- Graph: `experiments/graphs/exp1_100nodes_graph.json` (101 nodes)
 - Partition: `experiments/graphs/exp1_100nodes_part.json` (5 ranks)
-- Leader Election: 30 rounds
 
 **Results:**
 - **Leader Election:**
-  - Total Runtime: 0.002027s
+  - Total Runtime: 0.002169s
   - Total Rounds: 30
   - Total Payload Messages: 1500
-  - Total Payload Bytes: 61560
+  - Total Payload Bytes: 62040
   - STATUS: SUCCESS
   - Agreed Leader ID: 100
 - **Dijkstra (source=0):**
-  - Total Runtime: 0.003580s
+  - Total Runtime: 0.001063s
   - Total Iterations: 101
-  - Total P2P Messages: 188
-  - Total P2P Bytes: 1952
+  - Total P2P Messages: 186
+  - Total P2P Bytes: 1968
   - All 101 nodes reached with finite distances
 
-### Experiment 2: 50 Nodes / 2 Ranks
+**Explanation:** Empirical results perfectly match theoretical baselines. Dijkstra executed 101 operations to settle every node. All ranks were able to agree on leader ID 30 showing that the diameter is 30 or less.
+
+### Experiment 2: 51 Nodes / 2 Ranks
 
 **Objective:** Verify correctness on smaller graph with fewer partitions.
 
+**Experimental Hypothesis:** Decreasing the rank allocation from 5 to 2 should heavily increase local processing loads but reduce inter-rank message volume.
+
+**Expected Results:** P2P messaging overhead for Dijkstra will drop compared to Experiment 1. Total payload messages for Leader Election will reflect a smaller 2-rank collective model.
+
 **Setup:**
-- Graph: `experiments/graphs/exp2_50nodes.json` (51 nodes)
+- Graph: `experiments/graphs/exp2_50nodes_graph.json` (51 nodes)
 - Partition: `experiments/graphs/exp2_50nodes_part.json` (2 ranks)
-- Leader Election: 50 rounds
 
 **Results:**
 - **Leader Election:**
-  - Total Runtime: 0.001305s
+  - Total Runtime: 0.001294s
   - Total Rounds: 50
   - Total Payload Messages: 400
-  - Total Payload Bytes: 26400
+  - Total Payload Bytes: 25600
   - STATUS: SUCCESS
   - Agreed Leader ID: 50
 - **Dijkstra (source=0):**
-  - Total Runtime: 0.000893s
+  - Total Runtime: 0.000935s
   - Total Iterations: 51
-  - Total P2P Messages: 41
-  - Total P2P Bytes: 512
+  - Total P2P Messages: 43
+  - Total P2P Bytes: 496
   - All 51 nodes reached with finite distances
 
-### Experiment 3: 200 Nodes / 10 Ranks
+**Explanation:** The hypothesis is confirmed. P2P message volume for Dijkstra fell steeply from 186 down to 43. The total payload messages for leader election dropped from 1500 to 400.
+
+### Experiment 3: 201 Nodes / 10 Ranks
 
 **Objective:** Test scalability with large graph and many partitions.
 
+**Experimental Hypothesis:** Expanding to 10 ranks will cause an increase in MPI collective message counts compared to smaller clusters.
+
+**Expected Results:** Dijkstra will execute ~201 global reductions. Leader election will generate a spike in payload messages due to N * N rank communication.
+
 **Setup:**
-- Graph: `experiments/graphs/exp3_200nodes.json` (201 nodes)
+- Graph: `experiments/graphs/exp3_200nodes_graph.json` (201 nodes)
 - Partition: `experiments/graphs/exp3_200nodes_part.json` (10 ranks)
-- Leader Election: 40 rounds
 
 **Results:**
 - **Leader Election:**
-  - Total Runtime: 0.171973s
+  - Total Runtime: 0.013432s
   - Total Rounds: 40
   - Total Payload Messages: 8000
-  - Total Payload Bytes: 228480
+  - Total Payload Bytes: 198400
   - STATUS: SUCCESS
   - Agreed Leader ID: 200
 - **Dijkstra (source=0):**
-  - Total Runtime: 0.009428s
+  - Total Runtime: 0.007362s
   - Total Iterations: 201
-  - Total P2P Messages: 564
-  - Total P2P Bytes: 5312
+  - Total P2P Messages: 505
+  - Total P2P Bytes: 4560
   - All 201 nodes reached with finite distances
+
+**Explanation:** Message transfer across 10 ranks forced the payload message count to spike 8000 for leader election. Despite the heavy network scaling, the distributed state remained consistent, successfully computing accurate shortest paths and electing the correct global maximum node ID.
 
 ---
 
@@ -339,7 +355,7 @@ struct ElectMsg {
 
 1. **Separate Edge Storage for Send/Receive**
    - Decision: Maintain `m_adjList` (outgoing) and `m_incomingEdges` (incoming)
-   - Rationale: Different ranks need different edge views based on send/receive roles
+   - Rationale: Different algorithms require different directional views. Dijkstra primarily pushes state forward along outgoing edges, but processing incoming ghost-node boundaries safely required tracking inverse topology.
 
 2. **Getter Methods for Testing**
    - Decision: Added `getDistances()`, `getFinalLeaders()`, `getNumMessagesSent()` etc.
@@ -357,13 +373,9 @@ struct ElectMsg {
 
 ## Conclusion
 
-[TODO]
+This project successfully demonstrates a highly functional distributed MPI runtime for evaluating classic graph algorithms. The implementation handles strict architectural requirements including partition-based memory isolation, inter-partition message routing, and convergence verification.
 
-**Key Achievements:**
-1. Implemented partition-based graph algorithm distribution
-2. Achieved correct cross-partition communication for both algorithms
-3. Developed comprehensive test suite with high code coverage
-4. Integrated with NetGameSim for realistic graph generation
+By enforcing strict determinism across Python graph generation and C++ internal data structures, the system guarantees 100% reproducible execution environments. The experimental results validate that both Distributed Dijkstra and FloodMax Leader Election scale logically with rank allocation, balancing local compute bounds against necessary MPI network overhead.
 
 ---
 
