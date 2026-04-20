@@ -1,9 +1,9 @@
 #pragma once
 
-#include <unordered_map>
 #ifndef __DISTRIBUTED_LEADER_ELECTION_H__
 #define __DISTRIBUTED_LEADER_ELECTION_H__
 
+#include <map>
 #include "DistributedAlgorithm.h"
 
 struct ElectMsg {
@@ -16,7 +16,7 @@ public:
 	DistributedLeaderElection(int rounds): m_rounds(rounds) {}
 	void execute(GraphData &graph) override;
 	void reportMetrics() const override;
-	std::unordered_map<int, int> getFinalLeaders() {
+	std::map<int, int> getFinalLeaders() {
 		return m_finalLeaders;
 	}
 
@@ -29,7 +29,7 @@ private:
 	int m_numIterations;
 	int m_numMessages;
 	int m_bytesSent;
-	std::unordered_map<int, int> m_finalLeaders;
+	std::map<int, int> m_finalLeaders;
 	std::chrono::duration<double> m_totalRuntime;
 };
 

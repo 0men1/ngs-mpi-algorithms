@@ -1,9 +1,9 @@
 #pragma once
 
-#include <chrono>
 #ifndef __DISTRIBUTED_DIJKSTRA_H__
 #define __DISTRIBUTED_DIJKSTRA_H__
 
+#include <chrono>
 #include "DistributedAlgorithm.h"
 
 struct UpdateMsg {

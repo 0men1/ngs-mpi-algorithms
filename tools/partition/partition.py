@@ -20,7 +20,6 @@ def partitionGraph(graph_file: str, ranks: int, output_file: str):
     print("Successfully partitioned graph nodes into MPI ranks")
 
 def main():
-    print(sys.argv[3])
     if len(sys.argv) != 4:
         sys.exit("Usage: python partition.py <graph.json> <ranks> <output.json>")
 

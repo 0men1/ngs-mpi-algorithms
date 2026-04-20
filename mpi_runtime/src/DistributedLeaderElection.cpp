@@ -1,4 +1,3 @@
-
 #include <chrono>
 #include <limits>
 #include <vector>
@@ -13,8 +12,8 @@ void DistributedLeaderElection::execute(GraphData& graph) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &rankSize);
 
-    std::unordered_map<int, int> currentMax;
-    std::unordered_map<int, int> nextMax;
+    std::map<int, int> currentMax;
+    std::map<int, int> nextMax;
 
     m_numIterations = 0;
     m_numMessages = 0;

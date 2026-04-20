@@ -52,7 +52,7 @@ TEST_F(LeaderElectionTest, LeaderElectionElectsMaxNodeAsLeader) {
     DistributedLeaderElection election(10);
     election.execute(graph);
     
-    std::unordered_map<int, int> finalLeaders = election.getFinalLeaders();
+    std::map<int, int> finalLeaders = election.getFinalLeaders();
     
     int leaderCount = 0;
     for (const auto& [node, leader] : finalLeaders) {
@@ -77,7 +77,7 @@ TEST_F(LeaderElectionTest, LeaderElectionSimpleGraph) {
     DistributedLeaderElection election(5);
     election.execute(graph);
     
-    std::unordered_map<int, int> finalLeaders = election.getFinalLeaders();
+    std::map<int, int> finalLeaders = election.getFinalLeaders();
     
     for (const auto& [node, leader] : finalLeaders) {
         EXPECT_EQ(leader, expectedLeader) << "Node " << node << " has wrong leader";
@@ -97,7 +97,7 @@ TEST_F(LeaderElectionTest, LeaderElectionChainGraph) {
     DistributedLeaderElection election(5);
     election.execute(graph);
     
-    std::unordered_map<int, int> finalLeaders = election.getFinalLeaders();
+    std::map<int, int> finalLeaders = election.getFinalLeaders();
     
     for (const auto& [node, leader] : finalLeaders) {
         EXPECT_EQ(leader, expectedLeader) << "Node " << node << " has wrong leader";
@@ -113,7 +113,7 @@ TEST_F(LeaderElectionTest, AllNodesHaveLeader) {
     DistributedLeaderElection election(3);
     election.execute(graph);
     
-    std::unordered_map<int, int> finalLeaders = election.getFinalLeaders();
+    std::map<int, int> finalLeaders = election.getFinalLeaders();
     EXPECT_EQ(finalLeaders.size(), graph.m_ownedNodes.size());
 }
 
@@ -127,7 +127,7 @@ TEST_F(LeaderElectionTest, AllNodesAgreeOnSameLeader) {
     DistributedLeaderElection election(10);
     election.execute(graph);
     
-    std::unordered_map<int, int> finalLeaders = election.getFinalLeaders();
+    std::map<int, int> finalLeaders = election.getFinalLeaders();
     
     int firstLeader = -1;
     for (const auto& [node, leader] : finalLeaders) {
@@ -182,7 +182,7 @@ TEST_F(LeaderElectionTest, LeaderIsValidNodeId) {
     DistributedLeaderElection election(10);
     election.execute(graph);
     
-    std::unordered_map<int, int> finalLeaders = election.getFinalLeaders();
+    std::map<int, int> finalLeaders = election.getFinalLeaders();
     
     for (const auto& [node, leader] : finalLeaders) {
         EXPECT_GE(leader, 0) << "Leader ID cannot be negative";
@@ -201,7 +201,7 @@ TEST_F(LeaderElectionTest, LeaderElectionWithMaxRounds) {
     DistributedLeaderElection election(100);
     election.execute(graph);
     
-    std::unordered_map<int, int> finalLeaders = election.getFinalLeaders();
+    std::map<int, int> finalLeaders = election.getFinalLeaders();
     
     for (const auto& [node, leader] : finalLeaders) {
         EXPECT_EQ(leader, expectedLeader) 
