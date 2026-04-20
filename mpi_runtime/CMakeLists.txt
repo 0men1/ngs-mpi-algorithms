@@ -33,6 +33,9 @@ target_sources(run_test_dijkstra PRIVATE
 )
 target_include_directories(run_test_dijkstra PRIVATE include src)
 target_link_libraries(run_test_dijkstra PRIVATE GTest::GTest GTest::Main MPI::MPI_CXX nlohmann_json::nlohmann_json)
+target_compile_definitions(run_test_dijkstra PRIVATE
+	TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/test_graphs/"
+)
 add_test(NAME DijkstraTests COMMAND run_test_dijkstra)
 
 # Leader Election tests
@@ -45,4 +48,8 @@ target_sources(run_test_leaderelection PRIVATE
 )
 target_include_directories(run_test_leaderelection PRIVATE include src)
 target_link_libraries(run_test_leaderelection PRIVATE GTest::GTest GTest::Main MPI::MPI_CXX nlohmann_json::nlohmann_json)
+target_compile_definitions(run_test_leaderelection PRIVATE
+	TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/test_graphs/"
+)
 add_test(NAME LeaderElectionTests COMMAND run_test_leaderelection)
+
