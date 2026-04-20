@@ -37,6 +37,9 @@ brew install cmake
 # Install Google Test
 brew install googletest
 
+# Install java (if not already installed)
+brew install openjdk@17
+
 # Install Python (if not already installed)
 brew install python3
 ```
@@ -64,7 +67,13 @@ sudo apt-get install -y openjdk-17-jdk
    git submodule update --init --recursive
    ```
 
-3. Ensure all dependencies are installed (see above).
+3. Build NetGameSim (required for graph generation):
+   ```bash
+   cd NetGameSim && sbt clean compile assembly
+   ```
+   This will create the JAR at `NetGameSim/target/scala-3.2.2/netmodelsim.jar`.
+
+4. Ensure all dependencies are installed (see above).
 
 ---
 
@@ -102,23 +111,23 @@ The main executable requires graph and partition files in JSON format:
 # Ensure binaries are already built before executing the commands below.
 
 # Run Dijkstra algorithm
-mpirun -n 2 ./build/ngs_mpi --graph outputs/graph.json --part outputs/part.json --algo dijkstra --source 0
+mpirun -n <# of ranks> ./build/ngs_mpi --graph <path to exported graph> --part <path to exported partition> --algo dijkstra --source <source node id>
 
 # Run Leader Election algorithm
-mpirun -n 2 ./build/ngs_mpi --graph outputs/graph.json --part outputs/part.json --algo leader --rounds 30
+mpirun -n <# of ranks> ./build/ngs_mpi --graph <path to exported graph> --part <path to exported partition> --algo leader --rounds <# of rounds>
 ```
 
 **Command-line Options:**
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `--graph`, `-g` | Path to graph JSON file | `../outputs/graph.json` |
-| `--part`, `-p` | Path to partition JSON file | `../outputs/part.json` |
-| `--algo`, `-a` | Algorithm to run (`dijkstra` or `leader`) | `dijkstra` |
-| `--source`, `-s` | Source node for Dijkstra | `0` |
-| `--rounds`, `-r` | Number of rounds for Leader Election | `200` |
+All arguments are required. Use `--help` or `-h` to display usage information.
 
-**Note:** Default paths are relative to the `mpi_runtime/` directory where the executable runs. Use absolute paths or adjust accordingly.
+| Option | Description | Required For |
+|--------|-------------|--------------|
+| `--graph`, `-g` | Path to graph JSON file | All algorithms |
+| `--part`, `-p` | Path to partition JSON file | All algorithms |
+| `--algo`, `-a` | Algorithm to run (`dijkstra` or `leader`) | All algorithms |
+| `--source`, `-s` | Source node for Dijkstra | dijkstra |
+| `--rounds`, `-r` | Number of rounds for Leader Election | leader |
 
 ### Run All Tests
 
@@ -136,16 +145,12 @@ This command will:
 ## Project Structure
 
 ```
-CS453/                          # Project root
+ngs-mpi-algorithms/                          # Project root
 ├── README.md                   # This file
 ├── REPORT.md                   # Technical documentation
 ├── student.txt                 # Student info
 ├── build/                  # Build output directory
-├── configs/                    # NetGameSim configuration
-│   ├── defconfig.conf          # Default config (100 nodes)
-│   ├── largeGraph.conf          # Large Graph config (1000 nodes)
-│   ├── largerGraph.conf          # Larger Graph config (5000 nodes)
-│   └── example.conf            # Example config (10 nodes)
+├── configs/                    # NetGameSim configurations
 ├── mpi_runtime/                # MPI runtime implementation
 │   ├── CMakeLists.txt          # Build configuration
 │   ├── Makefile                # Convenience build targets
@@ -168,13 +173,13 @@ CS453/                          # Project root
 │       ├── run.sh              # Create partition files
 │       └── partition.py        # Partition algorithm
 ├── experiments/                # Experiment scripts
-│   ├── experiment1.sh         # 100 nodes / 5 ranks
-│   ├── experiment2.sh         # 50 nodes / 2 ranks
-│   ├── experiment3.sh         # 200 nodes / 10 ranks
+│   ├── experiment1.sh         # 101 nodes / 5 ranks
+│   ├── experiment2.sh         # 51 nodes / 2 ranks
+│   ├── experiment3.sh         # 201 nodes / 10 ranks
 │   └── graphs/                 # Pre-generated experiment graphs
-├── NetGameSim/                 # Graph generation library
+├── NetGameSim/                 # Graph generation library (git submodule)
 │   └── target/scala-3.2.2/
-│       └── netmodelsim.jar     # Pre-built JAR
+│       └── netmodelsim.jar     # Build with: cd NetGameSim && sbt clean compile assembly
 └── outputs/                    # Generated output directory
 ```
 
@@ -184,7 +189,7 @@ CS453/                          # Project root
 
 ### Graph Export (`tools/graph_export/`)
 
-Generates connected weighted graphs using NetGameSim and converts them to JSON. Accepts an existing NGS graph or creates generates one given NGS configurations. Accepts seed phrase for deterministic edge weight assignment. 
+Generates connected weighted graphs using NetGameSim and converts them to JSON. The script automatically extracts `seed`, `outputDirectory`, and `fileName` from the provided config file. 
 
 **Files:**
 - `run.sh` - Wrapper script that runs NetGameSim and calls enrichment.py
@@ -192,19 +197,21 @@ Generates connected weighted graphs using NetGameSim and converts them to JSON. 
 
 
 **Arguments:**
-| Option | Description | Default |
+| Option | Description | Required |
 |--------|-------------|---------|
-| `-c` | Path to NGS config file | - |
-| `-o` | Output JSON file path | `outputs/graph.json` |
-| `-h` | Show help | - |
+| `-c` | Path to NGS config file | Yes |
+| `-o` | Output JSON file path | Yes |
+| `-h` | Show help | No |
 
 **Usage:**
 ```bash
-# Example: Generate NGS graph with "myconfig.conf" NGS configurations & Export into "mygraph.json" file
-./tools/graph_export/run.sh -c configs/myconfig.conf -o outputs/mygraph.json 
+# Generate graph from config (seed/directory extracted from config)
+./tools/graph_export/run.sh -c configs/example.conf -o outputs/mygraph.json
 ```
 
 **Output:** JSON file with `metadata` (num_nodes, seed) and `adjacency_list` (node -> edges with v and w fields).
+
+**Note:** NetGameSim adds an extra "initial node" to the graph. For `statesTotal = N`, the generated graph will have N+1 nodes (nodes 0 to N). The initial node provides an entry point for graph traversal.
 
 ---
 
@@ -218,12 +225,12 @@ Partitions graph nodes across MPI ranks using round-robin assignment.
 
 
 **Arguments:**
-| Option | Description | Default |
+| Option | Description | Required |
 |--------|-------------|---------|
-| `-g` | Path to exported graph.json | `outputs/graph.json` |
-| `-o` | Output JSON file path | `outputs/part.json` |
-| `-r` | Number of ranks | `5` |
-| `-h` | Show help | - |
+| `-g` | Path to exported graph.json | Yes |
+| `-r` | Number of ranks | Yes |
+| `-o` | Output JSON file path | Yes |
+| `-h` | Show help | No |
 
 **Usage:**
 ```bash
@@ -308,10 +315,10 @@ Agreed Leader ID: 9
 Experiments use pre-generated graphs from NetGameSim. Run these from the project root directory:
 
 ```bash
-# Run all experiments (from CS453/ directory, NOT mpi_runtime/)
-./experiments/experiment1.sh  # 100 nodes, 5 ranks
-./experiments/experiment2.sh  # 50 nodes, 2 ranks
-./experiments/experiment3.sh  # 200 nodes, 10 ranks
+# Run all experiments (from root directory, NOT mpi_runtime/)
+./experiments/experiment1.sh  # 101 nodes, 5 ranks
+./experiments/experiment2.sh  # 51 nodes, 2 ranks
+./experiments/experiment3.sh  # 201 nodes, 10 ranks
 ```
 
 ---
