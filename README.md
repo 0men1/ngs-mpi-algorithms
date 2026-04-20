@@ -54,11 +54,6 @@ sudo apt-get install -y libgtest-dev
 
 2. Ensure all dependencies are installed (see above).
 
-3. Navigate to the project directory:
-```bash
-cd mpi_runtime
-```
-
 ---
 
 ## Building
@@ -66,38 +61,29 @@ cd mpi_runtime
 ### Full Build
 
 ```bash
-cmake -B build
-cmake --build build
+make build
 ```
 ### Clean Rebuild
 
 ```bash
-rm -rf build
-cmake -B build
-cmake --build build
+make clean_build
 ```
-
 ---
 
 ## Running
 
 ### Run the Main Application
 
-The main executable requires graph and partition files in JSON format. Run this from the `mpi_runtime/` directory:
+The main executable requires graph and partition files in JSON format:
 
 ```bash
-cd mpi_runtime
-
-# Clean and build (if necessary)
-rm -rf build
-cmake -B build
-cmake --build build
+# Ensure binaries are already built before executing the commands below.
 
 # Run Dijkstra algorithm
-mpirun -n 2 ./build/ngs_mpi --graph ../outputs/graph.json --part ../outputs/part.json --algo dijkstra --source 0
+mpirun -n 2 ./build/ngs_mpi --graph outputs/graph.json --part outputs/part.json --algo dijkstra --source 0
 
 # Run Leader Election algorithm
-mpirun -n 2 ./build/ngs_mpi --graph ../outputs/graph.json --part ../outputs/part.json --algo leader --rounds 30
+mpirun -n 2 ./build/ngs_mpi --graph outputs/graph.json --part outputs/part.json --algo leader --rounds 30
 ```
 
 **Command-line Options:**
@@ -123,27 +109,6 @@ This command will:
 2. Run Dijkstra tests with 2 MPI ranks
 3. Run Leader Election tests with 2 MPI ranks
 
-### Run Individual Test Suites
-
-```bash
-# Run only Dijkstra tests
-mpirun -n 2 ./build/run_test_dijkstra
-
-# Run only Leader Election tests
-mpirun -n 2 ./build/run_test_leaderelection
-```
-
-### Run Specific Tests
-
-```bash
-# Run a specific test
-mpirun -n 2 ./build/run_test_dijkstra --gtest_filter=DijkstraTest.DijkstraSourceDistanceZero
-
-# Run all tests matching a pattern
-mpirun -n 2 ./build/run_test_leaderelection --gtest_filter=LeaderElectionTest.*
-```
-
-
 ---
 
 ## Project Structure
@@ -154,6 +119,7 @@ CS453/                          # Project root
 ├── REPORT.md                   # Technical documentation
 ├── student.txt                 # Student info
 ├── CMakeLists.txt              # Build configuration
+├── build/                  # Build output directory
 ├── configs/                    # NetGameSim configuration
 │   ├── defconfig.conf          # Default config (100 nodes)
 │   └── example.conf            # Example config (10 nodes)
@@ -177,7 +143,6 @@ CS453/                          # Project root
 │   │       ├── simple_part.json   # Simple partition
 │   │       ├── chain_graph.json   # 5-node chain graph
 │   │       └── chain_part.json    # Chain partition
-│   └── build/                  # Build output directory
 ├── tools/                      # Utility scripts
 │   ├── graph_export/           # Graph generation tools
 │   │   ├── run.sh             # Generate graph from NetGameSim
@@ -208,27 +173,33 @@ CS453/                          # Project root
 
 ### Graph Export (`tools/graph_export/`)
 
-Generates connected weighted graphs using NetGameSim and converts them to JSON.
+Generates connected weighted graphs using NetGameSim and converts them to JSON. Accepts an existing NGS graph or creates generates one given NGS configurations. Accepts seed phrase for deterministic edge weight assignment. 
 
 **Files:**
 - `run.sh` - Wrapper script that runs NetGameSim and calls enrichment.py
 - `enrichment.py` - Converts NGS format to JSON, adds edge weights, verifies connectivity
 
-**Usage:**
-```bash
-# Using default config (configs/defconfig.conf)
-./tools/graph_export/run.sh
-
-# Using custom config and output path
-./tools/graph_export/run.sh -c configs/myconfig.conf -o outputs/mygraph.json
-```
 
 **Arguments:**
 | Option | Description | Default |
 |--------|-------------|---------|
-| `-c` | Path to NGS config file | `configs/defconfig.conf` |
+| `-c` | Path to NGS config file | - |
 | `-o` | Output JSON file path | `outputs/graph.json` |
+| `-d` | Target output directory for NGS | `outputs/` |
+| `-g` | Path to existing NGS graph file | - |
+| `-s` | Seed for weight assignment | `67` |
 | `-h` | Show help | - |
+
+*-g and -c are mutually exclusive. You may not include them in the same command*
+
+**Usage:**
+```bash
+# Example: Generate NGS graph with "myconfig.conf" NGS configurations & Export into "mygraph.json" file
+./tools/graph_export/run.sh -c configs/myconfig.conf -o outputs/mygraph.json 
+
+#Example: Export graph from existing "raw_ngs_graph.ngs" graph and output into "mygraph.json" file with seed 60
+./tools/graph_export/run.sh -g outputs/raw_ngs_graph.ngs -o outputs/mygraph.json -s 60
+```
 
 **Output:** JSON file with `metadata` (num_nodes, seed) and `adjacency_list` (node -> edges with v and w fields).
 
@@ -242,14 +213,6 @@ Partitions graph nodes across MPI ranks using round-robin assignment.
 - `run.sh` - Wrapper script (note: uses getopts, call python directly for simpler syntax)
 - `partition.py` - Reads graph JSON, assigns each node to a rank, outputs ownership map
 
-**Usage:**
-```bash
-# Direct call (recommended)
-.tools/partition/run.sh -g <graph.json> -r <num_ranks> -o <output.json>
-
-# Example
-.tools/partition/run.sh -g outputs/graph.json -r 4 -o outputs/part.json
-```
 
 **Arguments:**
 | Option | Description | Default |
@@ -258,6 +221,12 @@ Partitions graph nodes across MPI ranks using round-robin assignment.
 | `-r` | Number of ranks | `5` |
 | `-o` | Output JSON file path | `outputs/part.json` |
 | `-h` | Show help | - |
+
+**Usage:**
+```bash
+# Example: Partition graph "graph.json" into 4 ranks and into "part.json" file
+.tools/partition/run.sh -g outputs/graph.json -r 4 -o outputs/part.json
+```
 
 **Output:** JSON file mapping node ID to rank (e.g., `{"0": 0, "1": 0, "2": 1, ...}`).
 
@@ -271,13 +240,9 @@ This example walks through the complete pipeline: generate a graph with NetGameS
 
 **Step 1: Generate a graph with NetGameSim**
 
-Create a config file (e.g., `configs/example.conf`) or use the default:
+Create a config file (e.g., `configs/myconfig.conf`) or use the default `example.conf`:
 ```bash
-# Generate graph with default config (seed=100, 100 nodes)
-./tools/graph_export/run.sh
-
-# Or use a custom config
-./tools/graph_export/run.sh -c configs/example.conf -o outputs/example_graph.json
+./tools/graph_export/run.sh -c configs/example.conf -o outputs/example_graph.json -s 50
 ```
 
 Generated files:
@@ -300,9 +265,7 @@ Generated file:
 cd mpi_runtime
 
 # Clean and build (if necessary)
-rm -rf build
-cmake -B build
-cmake --build build
+make clean_build
 
 # Run Dijkstra (source node 0)
 mpirun -n 2 ./build/ngs_mpi --graph ../outputs/example_graph.json --part ../outputs/example_part.json --algo dijkstra --source 0
@@ -371,7 +334,5 @@ mpirun --version
 
 Clean the build directory and rebuild:
 ```bash
-rm -rf build
-cmake -B build
-cmake --build build
+make clean_build
 ```

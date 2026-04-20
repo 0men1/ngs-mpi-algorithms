@@ -4,13 +4,13 @@
 # Test large graph with many partitions
 #
 # Prerequisites:
-# - Ensure MPI runtime is built at ../mpi_runtime/build/ngs_mpi
+# - Ensure MPI runtime is built at ../build/ngs_mpi
 # - Graphs should exist in ./graphs/ directory
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-GRAPH="${SCRIPT_DIR}/graphs/exp3_200nodes.json"
-PART="${SCRIPT_DIR}/graphs/exp3_200nodes_part.json"
-MPIEXEC="${SCRIPT_DIR}/../mpi_runtime/build/ngs_mpi"
+GRAPH="${SCRIPT_DIR}/graphs/exp3/exp3_200nodes_graph.json"
+PART="${SCRIPT_DIR}/graphs/exp3/exp3_200nodes_part.json"
+MPIEXEC="${SCRIPT_DIR}/../build/ngs_mpi"
 
 echo "=========================================="
 echo "Experiment 3: 200 Nodes / 10 Ranks"

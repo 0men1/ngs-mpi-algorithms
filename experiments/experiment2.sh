@@ -8,9 +8,9 @@
 # - Graphs should exist in ./graphs/ directory
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-GRAPH="${SCRIPT_DIR}/graphs/exp2_50nodes.json"
-PART="${SCRIPT_DIR}/graphs/exp2_50nodes_part.json"
-MPIEXEC="${SCRIPT_DIR}/../mpi_runtime/build/ngs_mpi"
+GRAPH="${SCRIPT_DIR}/graphs/exp2/exp2_50nodes_graph.json"
+PART="${SCRIPT_DIR}/graphs/exp2/exp2_50nodes_part.json"
+MPIEXEC="${SCRIPT_DIR}/../build/ngs_mpi"
 
 echo "=========================================="
 echo "Experiment 2: 50 Nodes / 2 Ranks"
