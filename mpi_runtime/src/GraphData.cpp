@@ -2,13 +2,12 @@
 #include <fstream>
 #include <mpi.h>
 #include <string>
-#include <unordered_map>
 #include "GraphData.h"
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
 
-void GraphData::loadData(std::string &graphFile, std::string &partFile) {
+void GraphData::loadData(const std::string &graphFile, const std::string &partFile) {
 	std::ifstream graph_file(graphFile);
 	std::ifstream part_file(partFile);
 	if (!graph_file.is_open() || !part_file.is_open()) {

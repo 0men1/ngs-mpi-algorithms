@@ -1,6 +1,7 @@
 import sys
 import json
 from collections import deque
+import random
 
 
 def checkConnected(adj_list: dict) -> bool:
@@ -23,6 +24,7 @@ def checkConnected(adj_list: dict) -> bool:
 
 def generateGraph(ngs_file: str, output_file: str, seed: int = 0):
     print(f"Generating graph. NGS file: {ngs_file}, seed: {seed}")
+    random.seed(seed)
 
     adj_list = {}
 
@@ -39,7 +41,8 @@ def generateGraph(ngs_file: str, output_file: str, seed: int = 0):
     for edge in edges_data:
         u = edge["fromNode"]["id"]
         v = edge["toNode"]["id"]
-        w = edge.get("cost", 0.0)
+
+        w = random.uniform(1.0, 20.0)
 
         adj_list[u].append({"v": v, "w": w})
         adj_list[v].append({"v": u, "w": w})

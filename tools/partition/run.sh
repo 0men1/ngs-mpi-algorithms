@@ -1,29 +1,28 @@
 #!/bin/bash
 
-#./tools/partition/run.sh outputs/graph.json --ranks 8 --out outputs/part.json
-
 Help()
 {
-   # Display Help
-   echo "Add description of the script functions here."
+   echo "Graph Partitioning Tool"
    echo
-   echo "Syntax: ./tools/partition/run.sh [-g|h|r|o]"
-   echo "options:"
-   echo "g     Sets the path to graph.json."
-   echo "r     Sets the number of ranks"
-   echo "o     Sets the path to output part.json"
-   echo "h     Prints Help."
+   echo "Usage: $0 -g <graph.json> -r <ranks> -o <part.json>"
    echo
+   echo "Required Options:"
+   echo "  -g     Path to input graph.json file"
+   echo "  -r     Number of MPI ranks"
+   echo "  -o     Path to output partition.json file"
+   echo "  -h     Show this help message"
+   echo
+   echo "Example:"
+   echo "  $0 -g outputs/graph.json -r 4 -o outputs/part.json"
 }
 
+graph_json=""
+ranks=""
+output=""
 
-graph_json=outputs/graph.json
-ranks=8
-output=outputs/part.json
-
-while getopts ":h:g:r:o" option; do
+while getopts ":h:g:r:o:" option; do
 	case $option in 
-		h) # help
+		h)
 			Help
 			exit;;
 		g)
@@ -34,11 +33,20 @@ while getopts ":h:g:r:o" option; do
 			output=$OPTARG;;
 		/?)
 			echo "Error: Invalid option"
-			exit;;
+			Help
+			exit 1;;
 	esac
 done
 
-
-if [ -f $graph_json ]; then
-	python tools/partition/partition.py $graph_json $ranks $output
+if [[ -z "$graph_json" || -z "$ranks" || -z "$output" ]]; then
+    echo "Error: Missing required arguments."
+    Help
+    exit 1
 fi
+
+if [ ! -f "$graph_json" ]; then
+    echo "Error: Graph file not found: $graph_json"
+    exit 1
+fi
+
+python tools/partition/partition.py "$graph_json" "$ranks" "$output"

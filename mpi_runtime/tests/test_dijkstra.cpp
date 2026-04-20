@@ -14,12 +14,17 @@
 #include <mpi.h>
 #include <limits>
 
-const char *TEST_GRAPH_PATH = "tests/test_graphs/testgraph1.json";
-const char *TEST_PART_PATH = "tests/test_graphs/testpart1.json";
-const char *SIMPLE_GRAPH_PATH = "tests/test_graphs/simple_graph.json";
-const char *SIMPLE_PART_PATH = "tests/test_graphs/simple_part.json";
-const char *CHAIN_GRAPH_PATH = "tests/test_graphs/chain_graph.json";
-const char *CHAIN_PART_PATH = "tests/test_graphs/chain_part.json";
+#ifndef TEST_DATA_DIR
+	#define TEST_DATA_DIR "tests/test_graphs/"
+#endif
+
+// Global variables to find test graphs
+const std::string TEST_GRAPH_PATH = std::string(TEST_DATA_DIR) + "testgraph1.json";
+const std::string TEST_PART_PATH = std::string(TEST_DATA_DIR) + "testpart1.json";
+const std::string SIMPLE_GRAPH_PATH = std::string(TEST_DATA_DIR) + "simple_graph.json";
+const std::string SIMPLE_PART_PATH = std::string(TEST_DATA_DIR) + "simple_part.json";
+const std::string CHAIN_GRAPH_PATH = std::string(TEST_DATA_DIR) + "chain_graph.json";
+const std::string CHAIN_PART_PATH = std::string(TEST_DATA_DIR) + "chain_part.json";
 
 class GraphDataTest : public ::testing::Test {
 protected:
