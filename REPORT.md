@@ -19,7 +19,7 @@
 
 This project implements a distributed MPI-based runtime for executing graph algorithms on partitioned graphs. The system supports two primary algorithms: Distributed Dijkstra (shortest path) and Distributed Leader Election. The implementation distributes graph nodes across MPI ranks, with each rank maintaining local graph data and communicating via message passing.
 
-The project was developed as a coursework assignment for CS453 (Distributed Systems) at the University of Illinois Chicago. The primary goal was to implement and verify distributed graph algorithms that can scale across multiple MPI processes while maintaining correctness and demonstrating effective communication patterns.
+The project was developed as a coursework assignment for CS453 (Introduction to Parallel and Distributed Processing) at the University of Illinois Chicago. The primary goal was to implement and verify distributed graph algorithms that can scale across multiple MPI processes while maintaining correctness and demonstrating effective communication patterns.
 
 **Key Contributions:**
 - Implementation of a partition-based distributed Dijkstra algorithm with cross-partition boundary handling.
@@ -313,7 +313,7 @@ All experiments utilize pre-generated deterministic graphs stored within the `ex
   - Total P2P Bytes: 1968
   - All 101 nodes reached with finite distances
 
-**Explanation:** Empirical results perfectly match theoretical baselines. Dijkstra executed 101 operations to settle every node. All ranks were able to agree on leader ID 30 showing that the diameter is 30 or less.
+**Explanation:** Empirical results perfectly match theoretical baselines. Dijkstra executed 101 operations to settle every node. All ranks were able to agree on leader ID 100 showing that the diameter is 30 or less.
 
 ### Experiment 2: 51 Nodes / 2 Ranks
 
