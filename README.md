@@ -22,6 +22,8 @@ A distributed MPI-based runtime for executing graph algorithms on partitioned gr
 | C++ Compiler | C++17 | Language support |
 | Google Test | 1.10+ | Unit testing framework |
 | nlohmann/json | 3.2.0+ | JSON parsing for graph input |
+| Python | 3.8+ | Running graph export and partition tools |
+| Java (JDK) | 11+ | Running NetGameSim for graph generation |
 
 ### Installing Dependencies (macOS)
 
@@ -34,6 +36,9 @@ brew install cmake
 
 # Install Google Test
 brew install googletest
+
+# Install Python (if not already installed)
+brew install python3
 ```
 
 ### Installing Dependencies (Linux/Ubuntu)
@@ -42,6 +47,8 @@ brew install googletest
 sudo apt-get update
 sudo apt-get install -y openmpi-bin libopenmpi-dev cmake
 sudo apt-get install -y libgtest-dev
+sudo apt-get install -y python3 python3-pip
+sudo apt-get install -y openjdk-17-jdk
 ```
 
 **Note:** nlohmann/json is a header-only library and is included via CMake's find_package.
@@ -52,11 +59,18 @@ sudo apt-get install -y libgtest-dev
 
 1. Clone or download the project to your local machine.
 
-2. Ensure all dependencies are installed (see above).
+2. Initialize the NetGameSim submodule (required for graph generation):
+   ```bash
+   git submodule update --init --recursive
+   ```
+
+3. Ensure all dependencies are installed (see above).
 
 ---
 
 ## Building
+
+This project uses **CMake** as its build system, with **make** as a convenience wrapper. CMake handles cross-platform configuration and generates the appropriate build files for your system, ensuring consistent builds across different devices and platforms.
 
 ### Full Build
 
@@ -67,6 +81,14 @@ make build
 
 ```bash
 make clean_build
+```
+
+### Direct CMake Usage
+
+If you prefer to use CMake directly:
+```bash
+cmake -B build -S mpi_runtime
+cmake --build build
 ```
 ---
 
@@ -134,7 +156,7 @@ CS453/                          # Project root
 │   │   ├── DistributedLeaderElection.cpp/h  # Leader election
 │   │   └── DistributedAlgorithm.h  # Abstract base class
 │   ├── tests/                 # Test suites
-│   │   ├── test_dijkstra.cpp  # Dijkstra tests (8 tests)
+│   │   ├── test_dijkstra.cpp  # Dijkstra and GraphData tests (20 tests)
 │   │   ├── test_leaderelection.cpp  # Leader election tests (10 tests)
 │   │   └── test_graphs/       # Test data
 │   │       ├── testgraph1.json    # 10-node test graph
@@ -185,20 +207,12 @@ Generates connected weighted graphs using NetGameSim and converts them to JSON. 
 |--------|-------------|---------|
 | `-c` | Path to NGS config file | - |
 | `-o` | Output JSON file path | `outputs/graph.json` |
-| `-d` | Target output directory for NGS | `outputs/` |
-| `-g` | Path to existing NGS graph file | - |
-| `-s` | Seed for weight assignment | `67` |
 | `-h` | Show help | - |
-
-*-g and -c are mutually exclusive. You may not include them in the same command*
 
 **Usage:**
 ```bash
 # Example: Generate NGS graph with "myconfig.conf" NGS configurations & Export into "mygraph.json" file
 ./tools/graph_export/run.sh -c configs/myconfig.conf -o outputs/mygraph.json 
-
-#Example: Export graph from existing "raw_ngs_graph.ngs" graph and output into "mygraph.json" file with seed 60
-./tools/graph_export/run.sh -g outputs/raw_ngs_graph.ngs -o outputs/mygraph.json -s 60
 ```
 
 **Output:** JSON file with `metadata` (num_nodes, seed) and `adjacency_list` (node -> edges with v and w fields).
@@ -218,14 +232,14 @@ Partitions graph nodes across MPI ranks using round-robin assignment.
 | Option | Description | Default |
 |--------|-------------|---------|
 | `-g` | Path to exported graph.json | `outputs/graph.json` |
-| `-r` | Number of ranks | `5` |
 | `-o` | Output JSON file path | `outputs/part.json` |
+| `-r` | Number of ranks | `5` |
 | `-h` | Show help | - |
 
 **Usage:**
 ```bash
 # Example: Partition graph "graph.json" into 4 ranks and into "part.json" file
-.tools/partition/run.sh -g outputs/graph.json -r 4 -o outputs/part.json
+./tools/partition/run.sh -g outputs/graph.json -r 4 -o outputs/part.json
 ```
 
 **Output:** JSON file mapping node ID to rank (e.g., `{"0": 0, "1": 0, "2": 1, ...}`).
@@ -234,7 +248,25 @@ Partitions graph nodes across MPI ranks using round-robin assignment.
 
 ## Quick Example
 
-### End-to-End Graph to Algorithm Run
+### Using the End-to-End Script (Recommended)
+
+The easiest way to run the complete pipeline is to use the provided script:
+
+```bash
+# Run the full pipeline (generates graph, partitions, builds, runs algorithms)
+./run_end_to_end.sh
+
+# Run step-by-step with explanations
+./run_end_to_end.sh --step-by-step
+
+# Use existing graph and partition files
+./run_end_to_end.sh --graph outputs/mygraph.json --part outputs/mypart.json
+
+# Customize parameters
+./run_end_to_end.sh --ranks 4 --source 0 --rounds 20 --seed 100
+```
+
+### Manual Step-by-Step
 
 This example walks through the complete pipeline: generate a graph with NetGameSim, partition it, and run the algorithms.
 
@@ -262,16 +294,13 @@ Generated file:
 **Step 3: Run the algorithms**
 
 ```bash
-cd mpi_runtime
-
-# Clean and build (if necessary)
 make clean_build
 
 # Run Dijkstra (source node 0)
-mpirun -n 2 ./build/ngs_mpi --graph ../outputs/example_graph.json --part ../outputs/example_part.json --algo dijkstra --source 0
+mpirun -n 2 ./build/ngs_mpi --graph outputs/example_graph.json --part outputs/example_part.json --algo dijkstra --source 0
 
 # Run Leader Election (10 rounds)
-mpirun -n 2 ./build/ngs_mpi --graph ../outputs/example_graph.json --part ../outputs/example_part.json --algo leader --rounds 10
+mpirun -n 2 ./build/ngs_mpi --graph outputs/example_graph.json --part outputs/example_part.json --algo leader --rounds 10
 ```
 
 **Example Output (Dijkstra):**
