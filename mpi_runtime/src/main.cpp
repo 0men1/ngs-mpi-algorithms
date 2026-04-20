@@ -1,16 +1,16 @@
 #include <iostream>
 #include <memory>
 #include <vector>
-#include <mpi.h>
 #include "DistributedAlgorithm.h"
 #include "DistributedDijkstra.h"
 #include "DistributedLeaderElection.h"
 #include "GraphData.h"
+#include "mpi_utils.h"
 
 int main(int argc, char** argv) {
 	int world_rank;
-	MPI_Init(&argc, &argv);
-	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+	MPI_CHECK(MPI_Init(&argc, &argv));
+	MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &world_rank));
 
 	std::string graphFile = "outputs/graph.json";
 	std::string partFile = "outputs/part.json";
@@ -55,6 +55,6 @@ int main(int argc, char** argv) {
 	algo->execute(graph);
 	algo->reportMetrics();
 
-	MPI_Finalize();
+	MPI_CHECK(MPI_Finalize());
 	return 0;
 }

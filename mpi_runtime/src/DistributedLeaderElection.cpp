@@ -1,16 +1,16 @@
 #include <chrono>
 #include <limits>
 #include <vector>
-#include <mpi.h>
 #include "DistributedLeaderElection.h"
 #include "GraphData.h"
+#include "mpi_utils.h"
 
 void DistributedLeaderElection::execute(GraphData& graph) {
     auto start = std::chrono::high_resolution_clock::now();
 
     int rank, rankSize;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &rankSize);
+    MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &rank));
+    MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &rankSize));
 
     std::map<int, int> currentMax;
     std::map<int, int> nextMax;
@@ -45,7 +45,7 @@ void DistributedLeaderElection::execute(GraphData& graph) {
         }
 
         std::vector<int> recvCounts(rankSize, 0);
-        MPI_Alltoall(sendCounts.data(), 1, MPI_INT, recvCounts.data(), 1, MPI_INT, MPI_COMM_WORLD);
+        MPI_CHECK(MPI_Alltoall(sendCounts.data(), 1, MPI_INT, recvCounts.data(), 1, MPI_INT, MPI_COMM_WORLD));
         
         m_numMessages += rankSize;
         m_bytesSent += rankSize * sizeof(int);
@@ -70,7 +70,7 @@ void DistributedLeaderElection::execute(GraphData& graph) {
 
         std::vector<ElectMsg> recvBuf(totalRecv / sizeof(ElectMsg));
 
-        MPI_Alltoallv(sendBuf.data(), sendCounts.data(), sdispls.data(), MPI_BYTE, recvBuf.data(), recvCounts.data(), rdispls.data(), MPI_BYTE, MPI_COMM_WORLD);
+        MPI_CHECK(MPI_Alltoallv(sendBuf.data(), sendCounts.data(), sdispls.data(), MPI_BYTE, recvBuf.data(), recvCounts.data(), rdispls.data(), MPI_BYTE, MPI_COMM_WORLD));
         
         m_numMessages += rankSize;
         m_bytesSent += totalSend;
@@ -88,11 +88,11 @@ void DistributedLeaderElection::execute(GraphData& graph) {
 
 void DistributedLeaderElection::reportMetrics() const {
     int rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &rank));
 
     int globalMsgs = 0, globalBytes = 0;
-    MPI_Reduce(&m_numMessages, &globalMsgs, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&m_bytesSent, &globalBytes, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_CHECK(MPI_Reduce(&m_numMessages, &globalMsgs, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD));
+    MPI_CHECK(MPI_Reduce(&m_bytesSent, &globalBytes, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD));
 
     int localMinLeader = std::numeric_limits<int>::max();
     int localMaxLeader = -1;
@@ -108,8 +108,8 @@ void DistributedLeaderElection::reportMetrics() const {
     }
 
     int globalMinLeader = -1, globalMaxLeader = -1;
-    MPI_Reduce(&localMinLeader, &globalMinLeader, 1, MPI_INT, MPI_MIN, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&localMaxLeader, &globalMaxLeader, 1, MPI_INT, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_CHECK(MPI_Reduce(&localMinLeader, &globalMinLeader, 1, MPI_INT, MPI_MIN, 0, MPI_COMM_WORLD));
+    MPI_CHECK(MPI_Reduce(&localMaxLeader, &globalMaxLeader, 1, MPI_INT, MPI_MAX, 0, MPI_COMM_WORLD));
 
     if (rank == 0) {
         printf("\n================ LEADER ELECTION METRICS ================\n");
